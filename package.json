@@ -1,0 +1,22 @@
+{
+  "name": "javascript-gameengine-frontend",
+  "version": "1.0.0",
+  "description": "Javascript Web based game engine front end",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SJ-Jordaan/javascript-gameengine-frontend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SJ-Jordaan/javascript-gameengine-frontend/issues"
+  },
+  "homepage": "https://github.com/SJ-Jordaan/javascript-gameengine-frontend#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

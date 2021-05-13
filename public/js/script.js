@@ -5,7 +5,7 @@ const getApiRoot = () => {
   let element = document.getElementById('api-status');
 
   fetch(API_URL).then(res => {
-    return res.json();
+    return res.text();
   }).then(res => {
     element.innerHTML = res;
   }).catch(error => {

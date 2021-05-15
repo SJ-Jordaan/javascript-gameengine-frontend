@@ -38,13 +38,19 @@ class Requests {
         });
     }
 
-    sendRequestXHR(url, params, responseType = ResponseType.JSON, requestType = RequestType.GET) {
+    sendRequestXHR(url, params, headers = null, responseType = ResponseType.JSON, requestType = RequestType.GET) {
         if (!url) {
             throw "URL not Provided";
         }
 
         if (typeof url !== "string") {
-            throw "Route must be string";
+            throw "URL must be string";
+        }
+
+        if (headers) {
+            if (!(headers instanceof Headers)) {
+                throw new TypeError("provided headers object is not of type Headers");
+            }
         }
 
         switch (responseType) {
@@ -76,6 +82,10 @@ class Requests {
             default:
                 break;
         }
+
+        headers?.entries.forEach((headerName, headerValue) => {
+            this.xhr.setRequestHeader(headerName, headerValue);
+        });
 
         this.xhr.responseType = responseType;
 
@@ -111,11 +121,19 @@ class Requests {
         });
     }
 
-    sendRequestFetch(url, params, requestType = RequestType.GET) {
+    sendRequestFetch(url, params, headers = null, requestType = RequestType.GET) {
+        if (headers) {
+            if (!(headers instanceof Headers)) {
+                throw new TypeError("provided headers object is not of type Headers");
+            }
+        }
+
+        headers.append("Content-Type", "applicaton/json");
+
         return fetch(url, {
             method: requestType,
             body: JSON.stringify(params),
-            headers: params ? {"Content-Type": "applicaton/json"} : {},
+            headers: params ? headers : {},
         }).then((response) => {
             if (response.status >= 400) {
                 return response.json().then((errorData) => {

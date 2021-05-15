@@ -5,4 +5,5 @@ const RequestType = {
     PUT: "PUT",
 };
 
+Object.freeze(RequestType);
 export default RequestType;

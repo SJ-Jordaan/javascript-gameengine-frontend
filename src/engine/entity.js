@@ -6,12 +6,13 @@ export class Entity extends PIXI.Sprite{
         this.y = y;
         this.interactive = true;
         this.buttonMode = true;
+        this.anchor.set(0.5);
         this.on('pointerdown', this.onDragStart)
             .on('pointerup', this.onDragEnd)
             .on('pointerupoutside', this.onDragEnd)
             .on('pointermove', this.onDragMove);
     }
-    
+
     onDragStart(event){
         this.data = event.data;
         this.alpha = 0.5;

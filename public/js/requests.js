@@ -1,10 +1,8 @@
-const ResponseType = require("./common/constants/responseType");
-const RequestType = require("./common/constants/requestType");
-const e = require("express");
-const {response} = require("express");
+import ResponseType from "./common/constants/responseType.js";
+import RequestType from "./common/constants/requestType.js";
 
 class Requests {
-    constructor(url) {
+    constructor() {
         this.xhr = new XMLHttpRequest();
         this.url = undefined;
         this.respType = undefined;
@@ -146,3 +144,5 @@ class Requests {
         return paramString;
     }
 }
+
+export default Requests;

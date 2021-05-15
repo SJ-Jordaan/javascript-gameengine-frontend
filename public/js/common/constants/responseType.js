@@ -3,4 +3,4 @@ const ResponseType = {
     XML: "xml",
 };
 
-module.exports = ResponseType;
+export default ResponseType;

@@ -5,4 +5,4 @@ const RequestType = {
     PUT: "PUT",
 };
 
-module.exports = RequestType;
+export default RequestType;

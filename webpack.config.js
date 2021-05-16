@@ -1,4 +1,3 @@
-// const HtmlWepackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
 module.exports = {
@@ -22,11 +21,4 @@ module.exports = {
         filename: 'engineBundle.js',
         path: path.join(__dirname, "public", "scripts"),
     },
-
-    // plugins: [
-    //     new HtmlWepackPlugin({
-    //         template: (__dirname, "public", "views", "engine.html"),
-    //         filename: path.join(__dirname, "public", "views", "./engine.html")
-    //     })
-    // ]
 };

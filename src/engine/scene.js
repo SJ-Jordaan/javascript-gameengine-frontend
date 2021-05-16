@@ -1,23 +1,25 @@
 import {Entity} from "./entity";
-
 export class GameScene extends PIXI.Container{
     constructor(width, height){
         super();
         this.width = width;
         this.height = height;
+        this.edgeSnap = true;
+        this.vertexSnap = true;
+        this.snapDistance = 20;
+
+        //TODO: Snap should only be enabled in design mode
     }
 
-    init(){
-        let block_1 = new Entity("/public/images/tile.png");
-        this.addChild(block_1);
+    addEntity(entity){
+        this.addChild(entity);
+    }
 
-        let block_2 = new Entity("/public/images/tile.png", 100, 100);
-        this.addChild(block_2);
+    enableEdgeSnap(){
+        this.edgeSnap = true;
+    }
 
-        let block_3 = new Entity("/public/images/tile.png", 200, 200);
-        this.addChild(block_3);
-
-        let block_4 = new Entity("/public/images/tile.png", 50, 50);
-        this.addChild(block_4);
+    disableEdgeSnap(){
+        this.edgeSnap = false;
     }
 };

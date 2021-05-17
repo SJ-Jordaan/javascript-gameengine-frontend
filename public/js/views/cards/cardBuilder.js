@@ -5,10 +5,12 @@ class CardBuilder {
         var head = document.head;
         var link = document.createElement("link");
 
-        link.type = "text/css";
-        link.rel = "stylesheet";
-        link.href = "/js/views/cards/styling/dynamic-card.css";
-        head.appendChild(link);
+        if (head.innerHTML.indexOf("dynamic-card.css") <= -1) {
+            link.type = "text/css";
+            link.rel = "stylesheet";
+            link.href = "/js/views/cards/styling/dynamic-card.css";
+            head.appendChild(link);
+        }
     }
 
     createGenericCard(card) {
@@ -19,6 +21,9 @@ class CardBuilder {
         const cardObject = document.createElement("div");
         cardObject.id = "card-object";
         cardObject.classList.add("dynamic-card");
+        if (card.colour) {
+            cardObject.style.backgroundColor = card.colour.colourToString();
+        }
 
         if (card.image) {
             const cardImage = document.createElement("img");
@@ -34,6 +39,13 @@ class CardBuilder {
             cardBodyHeader.classList.add("dynamic-card-header");
             cardBodyHeader.innerHTML = card.header;
 
+            if (card.center) {
+                cardBodyHeader.style.textAlign = "center";
+            }
+            if (card.whiteText) {
+                cardBodyHeader.style.color = PresetColours.Light.colourToString();
+            }
+
             cardObject.appendChild(cardBodyHeader);
         }
 
@@ -45,6 +57,12 @@ class CardBuilder {
             cardBodyTitle.id = "card-body-title";
             cardBodyTitle.innerHTML = card.title;
             cardBodyTitle.classList.add("dynamic-card-title");
+            if (card.center) {
+                cardBodyTitle.style.textAlign = "center";
+            }
+            if (card.whiteText) {
+                cardBodyTitle.style.color = PresetColours.Light.colourToString();
+            }
             cardBodyContainer.appendChild(cardBodyTitle);
         }
 
@@ -53,25 +71,15 @@ class CardBuilder {
             cardBodyText.id = "card-body-text";
             cardBodyText.innerText = card.bodyText;
             cardBodyText.classList.add("dynamic-card-text");
+            if (card.center) {
+                cardBodyText.style.textAlign = "center";
+            }
+            if (card.whiteText) {
+                cardBodyText.style.color = PresetColours.Light.colourToString();
+            }
             cardBodyContainer.appendChild(cardBodyText);
-            if (card.buttons && card.buttons.length > 0) {
-                const cardBodyButtons = document.createElement("div");
-                cardBodyButtons.id = "card-body-buttons-container";
-                cardBodyButtons.classList.add("dynamic-card-button-container");
-                const buttons = card.buttons;
-
-                buttons.forEach((button) => {
-                    const bodyButton = document.createElement("button");
-                    bodyButton.onclick = button.action;
-                    bodyButton.innerHTML = button.title;
-                    bodyButton.id = button.id;
-                    bodyButton.classList.add("dynamic-card-button");
-                    bodyButton.style.backgroundColor = button.colourToString();
-                    bodyButton.style.fontSize = button.fontSize;
-
-                    cardBodyButtons.appendChild(bodyButton);
-                });
-                cardBodyContainer.appendChild(cardBodyButtons);
+            if (card.buttons && Array.isArray(card.buttons) && card.buttons.length > 0) {
+                cardBodyContainer.appendChild(this.createButtonContainer(card.buttons, card.center));
             }
         }
 
@@ -82,14 +90,45 @@ class CardBuilder {
             cardBodyFooter.id = "card-body-footer";
             cardBodyFooter.classList.add("dynamic-card-footer");
             cardBodyFooter.innerHTML = card.footer;
-
+            if (card.center) {
+                cardBodyFooter.style.textAlign = "center";
+            }
+            if (card.whiteText) {
+                cardBodyFooter.style.color = PresetColours.Light.colourToString();
+            }
             cardObject.appendChild(cardBodyFooter);
         }
 
         return cardObject;
     }
 
-    createComplete;
+    createButtonContainer(buttons, center = false) {
+        if (!Array.isArray(buttons)) {
+            throw "Provided Buttons object is not of type Array";
+        }
+
+        const cardBodyButtons = document.createElement("div");
+        cardBodyButtons.id = "card-body-buttons-container";
+        cardBodyButtons.classList.add("dynamic-card-button-container");
+
+        if (center) {
+            cardBodyButtons.style.justifyContent = "center";
+        }
+
+        buttons.forEach((button) => {
+            const bodyButton = document.createElement("button");
+            bodyButton.onclick = button.action;
+            bodyButton.innerHTML = button.title;
+            bodyButton.id = button.id;
+            bodyButton.classList.add("dynamic-card-button");
+            bodyButton.style.backgroundColor = button.colour.colourToString();
+            bodyButton.style.fontSize = button.fontSize;
+
+            cardBodyButtons.appendChild(bodyButton);
+        });
+
+        return cardBodyButtons;
+    }
 }
 
 export default CardBuilder;

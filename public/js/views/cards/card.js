@@ -37,23 +37,18 @@ class Card {
     }
 
     set center(value) {
-        if (typeof value === "boolean") this.center = value;
+        if (typeof value === "boolean") this._center = value;
         else throw TypeError("Provided Center is not of type Boolean");
-    }
-
-    set border(value) {
-        if (typeof value === "boolean") this._border = value;
-        else throw TypeError("Provided Border is not of type Boolean");
-    }
-
-    set whiteText(value) {
-        if (typeof value === "boolean") this._whiteText = value;
-        else throw TypeError("Provided WhiteText is not of type Boolean");
     }
 
     set colour(value) {
         if (value instanceof Colour) this._colour = value;
         else throw TypeError("Provided Colour is not of type Colour");
+    }
+
+    set whiteText(value) {
+        if (typeof value === "boolean") this._whiteText = value;
+        else throw TypeError("Provided White Text Value is not of type Boolean");
     }
 
     get bodyText() {
@@ -68,17 +63,17 @@ class Card {
     get header() {
         return this._header;
     }
+
     get center() {
         return this._center;
     }
-    get border() {
-        return this._border;
-    }
-    get whiteText() {
-        return this._whiteText;
-    }
+
     get colour() {
         return this._colour;
+    }
+
+    get whiteText() {
+        return this._whiteText;
     }
 }
 
@@ -89,10 +84,6 @@ class Button {
         this.action = action;
         this.colour = colour;
         this.fontSize = fontSize;
-    }
-
-    colourToString() {
-        return `rgba(${this.colour.red}, ${this.colour.green}, ${this.colour.blue}, ${this.colour.alpha})`;
     }
 }
 
@@ -111,6 +102,10 @@ class Colour {
         } else {
             throw new "Provided Colour is not of type Number"();
         }
+    }
+
+    colourToString() {
+        return `rgba(${this.red}, ${this.green}, ${this.blue}, ${this.alpha})`;
     }
 }
 

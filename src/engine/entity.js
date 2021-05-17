@@ -2,6 +2,7 @@ class Point {
     constructor(x, y) {
         this.x = x;
         this.y = y;
+        this.distanceTo = this.distanceTo.bind(this);
     }
 
     distanceTo(otherPoint) {
@@ -25,9 +26,14 @@ export class Entity extends PIXI.Sprite {
             bottomLeft: new Point(this.x, this.y + this.getBounds().height),
             bottomRight: new Point(this.x + this.getBounds().width, this.y + this.getBounds().height)
         };
-    }
 
-    //Methods
+        this.updateVertexPoints = this.updateVertexPoints.bind(this);
+        this.snapToEdge = this.snapToEdge.bind(this);
+        this.snapToVertex = this.snapToVertex.bind(this);
+        this.onDragStart = this.onDragStart.bind(this);
+        this.onDragEnd = this.onDragEnd.bind(this);
+        this.onDragMove = this.onDragMove.bind(this);
+    }
 
     updateVertexPoints() {
         this.vertexPoints = {

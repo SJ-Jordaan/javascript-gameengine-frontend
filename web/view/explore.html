@@ -29,10 +29,10 @@
     </header>
     <main>
         <nav class="nav-searchbar">
-            <form name="searchform" id="searchform" class="nav-form">
+            <form name="searchForm" id="searchForm" class="nav-form">
                 <fieldset class="nav-form-dropdown-container">
                     <label class="nav-label" for="searchBy"><span class="uppercase">Search by</span></label>
-                    <select class="nav-selector" name="searchBy" id="searchBy" form="searchform">
+                    <select class="nav-selector" name="searchBy" id="searchBy" form="searchForm">
                         <option value="creatorName">Creator Name</option>
                         <option value="gameName">Game Name</option>
                         <option value="year">Year</option>
@@ -41,16 +41,16 @@
                 </fieldset>
                 <fieldset class="nav-form-input-container" style="margin-left: 30px;">
                     <label class="nav-label" for="search"><span class="uppercase">Search</span></label>
-                    <input class="nav-input" type="text" id="searchFor" name="searchFor" placeholder="SEARCH...">
+                    <input class="nav-input" type="text" id="searchFor" name="searchFor" placeholder="Search...">
                 </fieldset>
-                <button class="primary-button" type="submit" id="searchSubmit" form="searchform" name="searchSubmit"
+                <button class="primary-button" type="submit" id="searchSubmit" form="searchForm" name="searchSubmit"
                     style="margin-left: 20px;"><span class="uppercase">Search</span></button>
             </form>
             <hr>
-            <form name="filterform" id="filterform" class="nav-form" style="float: right; margin-right: 30px;">
+            <form name="orderByForm" id="orderByForm" class="nav-form" style="float: right; margin-right: 30px;">
                 <fieldset class="nav-form-dropdown-container" style="width: 100%;">
-                    <label class="nav-label" for="filterBy"><span class="uppercase">Filter by</span></label>
-                    <select class="nav-selector" name="filterBy" id="filterBy" form="filterform"
+                    <label class="nav-label" for="orderBy"><span class="uppercase">Order by</span></label>
+                    <select class="nav-selector" name="orderBy" id="orderBy" form="orderByForm"
                         style="max-width: 150px;">
                         <option value="creator">Creator Name</option>
                         <option value="gameName">Game Name</option>
@@ -59,12 +59,12 @@
                     </select>
                 </fieldset>
                 <fieldset class="nav-form-dropdown-container" style="width: 30px;">
-                    <select class="nav-selector" name="orderAs" id="orderAs" form="filterform">
+                    <select class="nav-selector" name="orderAs" id="orderAs" form="orderByForm">
                         <option value="creator">Dsc</option>
                         <option value="gameName">Asc</option>
                     </select>
                 </fieldset>
-                <button class="primary-button" type="submit" id="filterSubmit" form="filterform" name="filterApply"
+                <button class="primary-button" type="submit" id="orderBySubmit" form="orderByForm" name="orderByApply"
                     style="margin-left: 10px;"><span class="uppercase">Apply</span></button>
             </form>
         </nav>
@@ -114,7 +114,7 @@
             elem.appendChild(cardWrapper);
         }
 
-        const ex = new Explore(new Form("searchform"), new Form("filterform"), new Requests());
+        const ex = new Explore(new Form("searchForm"), new Form("orderByForm"), new Requests());
         // searchForm.addEventTypeAndHandler(new EventTypeAndHandler(EventType.FORM.SUBMIT, (result) => {
         //     console.log("RESULT: " + JSON.stringify(result));
         // }));

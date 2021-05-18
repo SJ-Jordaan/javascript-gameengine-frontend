@@ -11,6 +11,7 @@ app.use(homeRouter);
 app.use(engineRouter);
 app.use(exploreRouter);
 // Serve Static Assets
+
 app.use("/public", express.static(path.join(__dirname, "public")));
 
 const PORT = process.env.PORT || 3000;

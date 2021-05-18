@@ -4,7 +4,7 @@ const path = require("path");
 const exploreRouter = express.Router();
 
 exploreRouter.get("/explore", (req, res) => {
-    res.sendFile(path.join(__dirname, "../", "web", "views", "explore.html"));
+    res.sendFile(path.join(__dirname, "../", "web", "view", "explore.html"));
 });
 
 module.exports = exploreRouter;

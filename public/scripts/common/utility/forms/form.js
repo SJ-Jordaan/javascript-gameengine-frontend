@@ -1,12 +1,27 @@
 import {EventTypeAndHandler} from "/public/scripts/common/utility/events/events.js";
-import EventType from "/public/scripts/common/constants/eventType.js";
 
 class Form {
     constructor(id) {
-        this.formId = id;
-        this.eventsAndHandlers = new Array();
-        this.formData;
-        this.form = document.querySelector(`#${id}`);
+        this._formId = id;
+        this._eventsAndHandlers = new Array();
+        this._formData;
+        this._form = document.querySelector(`#${this._formId}`);
+
+        if (!this._form) {
+            throw new Error("No form found for specified Id");
+        }
+    }
+
+    get formData() {
+        return this._formData;
+    }
+
+    get eventsAndHandlers() {
+        return this._eventsAndHandlers;
+    }
+
+    get form() {
+        return this._form;
     }
 
     addEventTypeAndHandler(eventHandler, replace = false) {
@@ -15,35 +30,37 @@ class Form {
         }
 
         if (replace) {
-            const index = this.events.findIndex((x) => x.EventType === eventHandler.EventType);
-            const handlerIndex = this.eventsAndHandlers.findIndex((x) => x.EventType === eventHandler.EventType);
+            const index = this._eventsAndHandlers.findIndex((x) => x.EventType === eventHandler.EventType);
             if (index > -1) {
-                this.events.removeAt(index);
-            }
-            if (handlerIndex > -1) {
-                this.eventsAndHandlers.removeAt(handlerIndex);
+                this._eventsAndHandlers.removeAt(index);
             }
         }
 
-        this.eventsAndHandlers.push(eventHandler);
+        this._eventsAndHandlers.push(eventHandler);
+    }
+
+    removeEventAndHandler(eventIndex) {
+        if (eventIndex > -1) {
+            this._eventsAndHandlers.removeAt(eventIndex);
+        }
     }
 
     getFormData() {
-        const formData = new FormData(document.querySelector(`#${this.formId}`));
+        const fData = new FormData(document.querySelector(`#${this._formId}`));
         const formValues = {};
 
-        for (let keyval of formData.entries()) {
+        for (let keyval of fData.entries()) {
             formValues[keyval[0]] = keyval[1];
         }
 
         return formValues;
     }
 
-    static getFormInputData(formId) {
-        const formData = new FormData(document.querySelector(`#${formId}`));
+    static getFormInputData(id) {
+        const fData = new FormData(document.querySelector(`#${id}`));
         const formValues = {};
 
-        for (let keyval of formData.entries()) {
+        for (let keyval of fData.entries()) {
             formValues[keyval[0]] = keyval[1];
         }
 
@@ -52,13 +69,11 @@ class Form {
 
     handleEvent(event) {
         event.preventDefault();
-        console.log(event);
-        this.formData = this.getFormData();
+        this._formData = this.getFormData();
 
-        console.log("BEFORE: " + JSON.stringify(this.formData));
-        this.eventsAndHandlers.forEach((ev) => {
+        this._eventsAndHandlers.forEach((ev) => {
             if (event.type === ev.EventType) {
-                ev.Handler(this.formData);
+                ev.Handler(this._formData);
             }
         });
     }

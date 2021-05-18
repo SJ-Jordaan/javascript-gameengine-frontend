@@ -1,53 +1,77 @@
 import Form from "/public/scripts/common/utility/forms/form.js";
 import EventType from "/public/scripts/common/constants/eventType.js";
-import {EventTypeAndHandler} from "/public/scripts/common/utility/events/events.js";
+import Requests from "/public/scripts/common/utility/http/requests.js";
 
-class SearchForm extends Form {
-    constructor(formId) {
-        super(formId);
+class ExploreItem {
+    constructor(gameId, gameName, year, creatorName, description) {
+        this._gameId = gameId;
+        this._gameName = gameName;
+        this._year = year;
+        this._creatorName = creatorName;
+        this._description = description;
     }
 
-    // addEventTypeAndHandler(eventHandler, replace = false) {
-    //     if (!(eventHandler instanceof EventTypeAndHandler)) {
-    //         throw "Even Handler provided is not of type EventTypeAndHandler";
-    //     }
+    get gameId() {
+        return this._gameId;
+    }
 
-    //     if (replace) {
-    //         const index = this.events.findIndex((x) => x.EventType === eventHandler.EventType);
-    //         const handlerIndex = this.eventsAndHandlers.findIndex((x) => x.EventType === eventHandler.EventType);
-    //         if (index > -1) {
-    //             this.events.removeAt(index);
-    //         }
-    //         if (handlerIndex > -1) {
-    //             this.eventsAndHandlers.removeAt(handlerIndex);
-    //         }
-    //     }
+    get gameName() {
+        return this._gameName;
+    }
 
-    //     this.eventsAndHandlers.push(eventHandler);
-    // }
+    get year() {
+        return this._year;
+    }
 
-    // getFormData() {
-    //     const formData = new FormData(document.querySelector(`#${this.searchFormId}`));
-    //     const formValues = {};
+    get creatorName() {
+        return this._creatorName;
+    }
 
-    //     for (let keyval of formData.entries()) {
-    //         formValues[keyval[0]] = keyval[1];
-    //     }
-
-    //     return formValues;
-    // }
-
-    // handleEvent(event) {
-    //     event.preventDefault();
-    //     this.formData = this.getFormData();
-
-    //     console.log(this.formData);
-    //     this.eventsAndHandlers.forEach((ev) => {
-    //         if (event.type === ev.EventType) {
-    //             ev.Handler(this.formData);
-    //         }
-    //     });
-    // }
+    get description() {
+        return this._description;
+    }
 }
 
-export default SearchForm;
+class Explore {
+    constructor(searchForm, orderByForm, serverApi) {
+        if (!(searchForm instanceof Form) || !(orderByForm instanceof Form)) {
+            throw new Error("Provided forms should be of type Form");
+        }
+
+        if (!(serverApi instanceof Requests)) {
+            throw new Error("Provided Server API should be of Type Requests");
+        }
+
+        this._searchForm = searchForm;
+        this._orderByForm = orderByForm;
+        this._serverApi = serverApi;
+        this._serverResponse;
+    }
+
+    get searchForm() {
+        return this._searchForm;
+    }
+
+    get orderByForm() {
+        return this._orderByForm;
+    }
+
+    getSearchResults() {
+        if (!this._searchForm) {
+            throw new Error("Search Form not initialized");
+        }
+
+        if (!this._searchForm.submittedFormData) {
+            throw new Error("Search Form not Submitted");
+        }
+
+        return new Promise((resolve, reject) => {
+            resolve(true);
+            reject(false);
+        });
+    }
+
+    orderBy() {}
+}
+
+export {Explore, ExploreItem};

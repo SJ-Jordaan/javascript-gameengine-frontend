@@ -1,4 +1,4 @@
-import {Card, Button, PresetColours} from "/js/views/cards/card.js";
+import {Card, Button, PresetColours} from "/public/scripts/views/cards/card.js";
 
 class CardBuilder {
     constructor() {
@@ -8,7 +8,7 @@ class CardBuilder {
         if (head.innerHTML.indexOf("dynamic-card.css") <= -1) {
             link.type = "text/css";
             link.rel = "stylesheet";
-            link.href = "/js/views/cards/styling/dynamic-card.css";
+            link.href = "/public/scripts/views/cards/styling/dynamic-card.css";
             head.appendChild(link);
         }
     }

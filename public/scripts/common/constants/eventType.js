@@ -1,4 +1,4 @@
-const EventTypes = {
+const EventType = {
     MOUSE: {
         UP: "mouseup",
         DOWN: "mousedown",

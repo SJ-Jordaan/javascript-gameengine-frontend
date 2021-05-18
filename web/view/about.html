@@ -12,7 +12,7 @@
     <main>This is just here for setup</main>
 
     <script type="module">
-        import Requests from "/js/common/utility/http/requests.js";
+        import Requests from "/public/scripts/common/utility/http/requests.js";
         Requests.SendGETRequestXHR("https://reqres.in/api/users?page=2")
             .then(response => {
                 console.log("STATIC GET REQUEST RESPONSE:")

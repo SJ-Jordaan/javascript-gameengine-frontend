@@ -1,0 +1,68 @@
+.nav-searchbar {
+    margin-top: 30px;
+}
+
+.nav-form {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    margin: 0;
+    margin-left: 30px;
+    height: 30px;
+}
+
+fieldset {
+    padding: 0px;
+    margin: 0px;
+    border: none;
+}
+
+.nav-form-dropdown-container {
+    width: 300px;
+    display: flex;
+}
+
+.nav-form-input-container {
+    width: 480px;
+    display: flex;
+}
+
+.nav-label {
+    padding: 0;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+}
+
+.nav-input {
+    padding: 0;
+    padding-left: 3px;
+    padding-right: 3px;
+    text-align: left;
+    margin-left: 5px;
+    font-family: inherit;
+    font-size: inherit;
+    letter-spacing: inherit;
+    height: auto;
+    flex-grow: 1;
+}
+
+.nav-selector {
+    padding: 0;
+    height: 100%;
+    margin-left: 5px;
+    font-family: inherit;
+    font-size: inherit;
+    letter-spacing: inherit;
+    flex-grow: 1;
+}
+
+#searchResults {
+    margin: 30px;
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-auto-rows: auto;
+    grid-gap: 1em;
+}

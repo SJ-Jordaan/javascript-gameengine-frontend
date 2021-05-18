@@ -12,7 +12,7 @@ router.get("/about", (req, res) => {
 });
 
 router.get("/welcome", (req, res) => {
-    res.sendFile(path.join(__dirname, "../", "public", "views", "welcome/index.html"));
+    res.sendFile(path.join(__dirname, "../", "public", "views", "welcome", "index.html"));
 });
 
 module.exports = router;

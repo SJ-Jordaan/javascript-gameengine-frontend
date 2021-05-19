@@ -1,14 +1,15 @@
-import { Entity } from "./entity";
 export class GameScene extends PIXI.Container {
-    constructor() {
+    constructor(name) {
         super();
+        this.name = name;
         this.edgeSnap = true;
         this.vertexSnap = true;
         this.snapDistance = 20;
-        this.enableEdgeSnap = this.enableEdgeSnap.bind(this);
-        this.disableEdgeSnap = this.disableEdgeSnap.bind(this);
+
         this.enableVertexSnap = this.enableVertexSnap.bind(this);
         this.disableVertexSnap = this.disableVertexSnap.bind(this);
+        this.enableEdgeSnap = this.enableEdgeSnap.bind(this);
+        this.disableEdgeSnap = this.disableEdgeSnap.bind(this);
     }
 
     enableEdgeSnap() {

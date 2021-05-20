@@ -1,7 +1,7 @@
 import Point from "./point";
 
-const EntityType = {
-    character: "Character",
+export const EntityType = {
+    character: "character",
     surface: "surface", 
     background: "background",
 };
@@ -15,6 +15,7 @@ export class BaseEntity extends PIXI.Sprite {
         this.interactive = true;
         this.buttonMode = true;
         this.type = EntityType.surface;
+        this.anchor.set(0.5);
         this.vertexPoints = {
             topLeft: new Point(this.x, this.y),
             topRight: new Point(this.x + this.getBounds().width, this.y),
@@ -47,7 +48,7 @@ export class BaseEntity extends PIXI.Sprite {
     }
 
     snapToEdge(snapDistance) {
-        if (this.parent.edgeSnap === true) {
+        if (this.parent.mode === "design" && this.parent.edgeSnap === true) {
             let siblings = this.parent.children.filter(element => {
                 return element.x !== this.x && element.y !== this.y;
             });
@@ -80,7 +81,7 @@ export class BaseEntity extends PIXI.Sprite {
     }
 
     snapToVertex(snapDistance) {
-        if (this.parent.vertexSnap === true) {
+        if (this.parent.mode === "design" && this.parent.vertexSnap === true) {
             let siblings = this.parent.children.filter(element => {
                 return element.x !== this.x && element.y !== this.y;
             });

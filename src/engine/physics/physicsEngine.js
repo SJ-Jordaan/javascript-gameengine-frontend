@@ -1,3 +1,5 @@
+import { EntityType } from "../core/baseEntity";
+
 //Collision detection between two entities
 export function detectCollision(first, second) {
     const bounds_1 = first.getBounds();
@@ -9,6 +11,14 @@ export function detectCollision(first, second) {
         && bounds_1.y + bounds_1.height > bounds_2.y;
 };
 
-export function impulseResponse(first, second){
-    
+export function impulseResponse(first, second) {
+
+}
+
+export function freeFall(rigidBody, delta) {
+    if (rigidBody.onSurface() === false) {
+        if (rigidBody.y + rigidBody.width / 2 < rigidBody.parent._height) {
+            rigidBody.y = rigidBody.y + 1 / 2 * rigidBody.parent.gravity * Math.pow(delta, 2);
+        }
+    }
 }

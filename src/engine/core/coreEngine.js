@@ -26,8 +26,37 @@ export class CoreEngine {
         this.createGame = this.createGame.bind(this);
         this.loadDefaultAssets = this.loadDefaultAssets.bind(this);
         this.createGameEntity = this.createGameEntity.bind(this);
-        this.createBackground = this.createBackground.bind(this);
+        this.addTestObjects = this.addTestObjects.bind(this);
         this.render = this.render.bind(this);
+        this.playGame = this.playGame.bind(this);
+        this.stopGame = this.stopGame.bind(this);
+    }
+
+    addTestObjects(){
+        const surface_1 = new BaseEntity(PIXI.utils.TextureCache["redTile"], "red");
+        surface_1.x = 20;
+        surface_1.y = 20;
+        this.games[this.currentGameIndex].scenes[0].addChild(surface_1);
+
+        const surface_2 = new BaseEntity(PIXI.utils.TextureCache["blackTile"], "black");
+        surface_2.x = 20;
+        surface_2.y = 20;
+        this.games[this.currentGameIndex].scenes[0].addChild(surface_2);
+
+        const surface_3 = new BaseEntity(PIXI.utils.TextureCache["yellowTile"], "yellow");
+        surface_3.x = 20;
+        surface_3.y = 20;
+        this.games[this.currentGameIndex].scenes[0].addChild(surface_3);
+
+        const surface_4 = new BaseEntity(PIXI.utils.TextureCache["brownTile"], "brown");
+        surface_4.x = 20;
+        surface_4.y = 20;
+        this.games[this.currentGameIndex].scenes[0].addChild(surface_4);
+
+        const surface_5 = new BaseEntity(PIXI.utils.TextureCache["greenTile"], "green");
+        surface_5.x = 20;
+        surface_5.y = 20;
+        this.games[this.currentGameIndex].scenes[0].addChild(surface_5);
     }
 
     init() {
@@ -49,6 +78,12 @@ export class CoreEngine {
         const createBtn = document.querySelector("#create-sprite-button");
         createBtn.addEventListener('click', this.createGameEntity, false);
 
+        const playBtn = document.querySelector("#play-button");
+        playBtn.addEventListener('click', this.playGame, false);
+
+        const stopBtn = document.querySelector("#stop-button");
+        stopBtn.addEventListener('click', this.stopGame, false);
+
         //Pre-load default assets here (Assets that come with the engine)
         this.loader.baseUrl = "/public/assets/";
 
@@ -62,9 +97,11 @@ export class CoreEngine {
         PIXI.Ticker.shared.add(this.render);
     }
 
-    render(){
+    render(delta){
         this.renderer.clear();
-        this.games[this.currentGameIndex].play();
+        if(this.games[this.currentGameIndex].mode === "play"){
+            this.games[this.currentGameIndex].play(delta);
+        }
         this.renderer.render(this.stage);
     }
 
@@ -78,9 +115,9 @@ export class CoreEngine {
             .add("redTile", "images/redTile.png")
             .add("whiteTile", "images/whiteTile.png")
             .add("orangeTile", "images/orangeTile.png")
-            // .add("background", "images/background.jpg");
+            .add("background", "images/background.jpg");
 
-        // this.loader.onComplete.add();
+        this.loader.onComplete.add(this.addTestObjects);
         this.loader.load();
     }
 
@@ -104,7 +141,7 @@ export class CoreEngine {
 
     createGame(gameName) {
         let game = new Game(gameName);
-        game.init();
+        game.init(this.renderer.view.width, this.renderer.view.height);
         this.games.push(game);
     }
 
@@ -125,13 +162,11 @@ export class CoreEngine {
         this.games[this.currentGameIndex].scenes[0].addChild(gameEntity);
     }
 
-    createBackground(texture = PIXI.utils.TextureCache["background"]){
-        const backgrounds = this.games[this.currentGameIndex].scenes[0].children.filter(element => {
-            return element.name.toLowerCase() === "background";
-        });
+    playGame(){
+        this.games[this.currentGameIndex].setGameMode("play");
+    }
 
-        const index = backgrounds.length;
-        const background = new BaseEntity(texture, "background" + index);
-        this.games[this.currentGameIndex].scenes[this.games[this.currentGameIndex].currentSceneIndex].addChild(background);
+    stopGame(){
+        this.games[this.currentGameIndex].setGameMode("design");
     }
 };

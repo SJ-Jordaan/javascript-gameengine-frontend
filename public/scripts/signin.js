@@ -1,4 +1,4 @@
-// import 'js-loading-overlay'
+import 'js-loading-overlay'
 // JsLoadingOverlay.show({'spinnerIcon': 'triangle-skew-spin'});
 let message = [];
 firebase.auth().onAuthStateChanged(function(user) {

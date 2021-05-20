@@ -1,7 +1,10 @@
+// import Loader from "/public/scripts/loader.js";
+
 let message = [];
 
 function signUp() {
-	
+	// const loadOverlay = new Loader();
+	//  loadOverlay.toggleLoadOverlay(true);
 	document
 		.getElementById("signUpForm")
 		.addEventListener("submit", function (event) {
@@ -94,3 +97,4 @@ function validateFields(name, email, password1, password2) {
 
 	return isValidated;
 }
+// export default signUp;

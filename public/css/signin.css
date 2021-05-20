@@ -1,0 +1,118 @@
+body{
+    margin:0;
+    padding: 0;
+    font-family: sans-serif;
+    background-image: url("../images/background.jpg");
+    background-size: cover;
+}
+.game{
+    width: 300px;
+    padding: 30px ;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    background-color: rgb(0, 0, 0);
+    text-align: center;
+}
+
+/* This it the login */
+.game h1{ 
+    color: white;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+/* This for username and password inputs */
+.game input[type="text"],.game input[type="password"]
+{
+    border: 0;
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 3px solid #0367fd;
+    padding: 14px 10px;
+    width: 220px;
+    outline: none;
+    color: white;
+    border-radius: 24px;
+    transition: 0.25px;
+    /* transition help of color change when the cursor is inside username of password fields*/
+} 
+
+.game input[type="text"]:focus,box input[type="password"]:focus 
+{
+    width: 270px;
+    border-color: #ffc400ec;
+}
+
+/* css for the submit button */
+.game input[type="submit"]{
+    border: 0;
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 3px solid #ffc400ec;
+    padding: 14px 35px;
+    outline: none;
+    color: white;
+    border-radius: 24px;
+    transition: 0.25px;
+    cursor: pointer;
+}
+/* This would the color when you hover of the the login button */
+.game input[type="submit"]:hover{
+    background-color: #ffc400ec;
+}
+
+.game p{ 
+    color: white;
+    font-style: italic;
+}
+
+/* *****************TOAST *************** */
+#snackbar {
+    visibility: hidden;
+    min-width: 300px;
+    margin-left: -170px;
+    background-color: rgb(0, 0, 0);
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+  }
+  
+  #snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+  
+  @-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;} 
+    to {bottom: 30px; opacity: 1;}
+  }
+  
+  @keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+  }
+  
+  @-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;} 
+    to {bottom: 0; opacity: 0;}
+  }
+  
+  @keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+  }  }
+  }
+
+  

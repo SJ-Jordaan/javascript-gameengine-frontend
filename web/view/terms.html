@@ -9,6 +9,8 @@
     <link rel="stylesheet" type="text/css" href="/public/css/main.css">
     <link rel="stylesheet" type="text/css" href="/public/css/main-navbar.css">
     <link rel="stylesheet" type="text/css" href="/public/css/main-searchbar.css">
+    <link rel="stylesheet" type="text/css" href="/public/css/loader.css" />
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>LAME|Engine2D</title>
 </head>
@@ -270,9 +272,12 @@
     </main>
     <script type="module">
         import Requests from "/public/scripts/common/utility/http/requests.js";
-        import EventType from "/public/scripts/common/constants/eventType.js"
+        import EventType from "/public/scripts/common/constants/eventType.js";
+        import LoadOverlay from "/public/scripts/loadOverlay.js";
 
         const decline = document.getElementById("declineAgreement");
+        const loadOverlay = new LoadOverlay();
+
         decline.addEventListener(EventType.MOUSE.CLICK, (event) => {
             event.preventDefault();
             window.location.pathname = "/explore";
@@ -281,8 +286,10 @@
         const accept = document.getElementById("acceptAgreement");
         accept.addEventListener(EventType.MOUSE.CLICK, (event) => {
             event.preventDefault();
-            console.log("SENDING ACCEPTENCE")
+            loadOverlay.toggleLoadOverlay(true);
+
             setTimeout(() => {
+                loadOverlay.toggleLoadOverlay(false);
                 window.location.pathname = "/create/new-game";
             }, 5000)
         });

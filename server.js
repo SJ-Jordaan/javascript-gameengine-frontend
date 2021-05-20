@@ -4,12 +4,14 @@ const path = require("path");
 const homeRouter = require("./routes/homeRouter");
 const engineRouter = require("./routes/engineRouter");
 const exploreRouter = require("./routes/exploreRouter");
+const authRouter = require("./routes/authRouter");
 
 // Define Express App
 const app = express();
 app.use(homeRouter);
 app.use(engineRouter);
 app.use(exploreRouter);
+app.use(authRouter);
 // Serve Static Assets
 
 app.use("/public", express.static(path.join(__dirname, "public")));
@@ -17,5 +19,5 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log("Server connected at:", PORT);
+	console.log("Server connected at:", PORT);
 });

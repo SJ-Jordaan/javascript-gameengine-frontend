@@ -35,6 +35,17 @@ firebase.auth().onAuthStateChanged(function(user) {
       firebase.auth().signInWithEmailAndPassword(userEmail, userPassword)
     .then((userCredential) => {
         // Signed in
+        fetch("https://game-engine-api.herokuapp.com/api/auth/signin", {
+					method: "POST",
+					body: JSON.stringify({
+						uid: userCredential.uid,
+					}),
+					headers: {
+						"Content-type": "application/json; charset=UTF-8",
+					},
+				}).then((data) => {
+					console.log(data);
+				});
         const user = userCredential.user;
 
         console.log(`Successfully signed in user details: ${user}`); 

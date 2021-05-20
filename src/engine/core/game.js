@@ -1,12 +1,12 @@
-import { BaseEntity } from "./baseEntity";
-import { AnimatableEntity } from "./animatableEntity";
-import { GameScene } from "./scene";
-import { detectCollision, freeFall } from "../physics/physicsEngine";
+import {BaseEntity} from "./baseEntity";
+import {AnimatableEntity} from "./animatableEntity";
+import {GameScene} from "./scene";
+import {detectCollision, freeFall} from "../physics/physicsEngine";
 
 const GameMode = {
     design: "design",
     play: "play",
-    paused: "Paused"
+    paused: "Paused",
 };
 
 Object.freeze(GameMode);
@@ -34,6 +34,17 @@ export default class Game {
         this.scenes.push(gameScene);
     }
 
+    getSceneAtIndex(index) {
+        if (typeof index === "number" && index < this.scenes.length) {
+            return this.scenes[index];
+        }
+        return undefined;
+    }
+
+    getCurrentScene() {
+        return this.scenes[this.currentSceneIndex];
+    }
+
     setGameMode(mode) {
         this.mode = GameMode[mode];
         this.scenes[this.currentSceneIndex].mode = this.mode;
@@ -56,7 +67,7 @@ export default class Game {
 
     update(delta) {
         const children = this.scenes[this.currentSceneIndex].children;
-        children.forEach(element => {
+        children.forEach((element) => {
             if (element instanceof AnimatableEntity) {
                 element.transformX(1);
                 freeFall(element, delta);

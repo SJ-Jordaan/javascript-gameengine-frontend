@@ -35,6 +35,7 @@ export class BaseEntity extends PIXI.Sprite {
         this.snapToEdge = this.snapToEdge.bind(this);
         this.snapToVertex = this.snapToVertex.bind(this);
         this.getSiblings = this.getSiblings.bind(this);
+        this.transformEntity = this.transformEntity.bind(this);
     }
 
     updateVertexPoints() {
@@ -136,9 +137,18 @@ export class BaseEntity extends PIXI.Sprite {
         this.updateVertexPoints();
     }
 
-    transform(transformOffsetX, transformOffsetY) {
+    transformEntity(transformOffsetX, transformOffsetY) {
         this.transformX(transformOffsetX);
         this.transformY(transformOffsetY);
+    }
+
+    rotateEntity(rotation) {
+        this.setTransform(this.position.x, this.position.y, this.scale.x, this.scale.y, rotation);
+        this.setTransform(this.position.x, this.position.y, this.scale.x, this.scale.y, rotation);
+    }
+
+    scaleEntity(scaleX, scaleY) {
+        this.setTransform(this.position.x, this.position.y, scaleX, scaleY, this.rotation);
     }
 
     onDragStart(event) {
@@ -152,6 +162,7 @@ export class BaseEntity extends PIXI.Sprite {
     }
 
     onDragEnd() {
+        this.parent.setSelectedEntityName(this.name);
         this.alpha = 1;
         this.dragging = false;
         this.data = null;

@@ -4,7 +4,7 @@ let message = [];
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
 
-      var user = firebase.auth().currentUser;
+      let user = firebase.auth().currentUser;
      
       if(user != null){
   

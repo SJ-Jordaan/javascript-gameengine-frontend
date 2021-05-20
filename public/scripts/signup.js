@@ -21,16 +21,13 @@ function signUp() {
 			.then(async (userCredential) => {
 				document.getElementById("overlay").style.display = "none"
 				// Signed in
-				var user = userCredential.user;
+				
 				const toast = document.getElementById("snackbar");
 				toast.className = "show";
 				toast.innerHTML = `successfully create user: ${userCredential.email}`;
 
 				//TODO: Send to BACKEND
-				console.log({
-					username: name,
-					uid: userCredential.uid,
-				});
+			
 				fetch("https://game-engine-api.herokuapp.com/api/auth/signup", {
 					method: "POST",
 					body: JSON.stringify({
@@ -42,9 +39,9 @@ function signUp() {
 					},
 				}).then((data) => {
 					// Call login
-					window.location = '/signin'
-					console.log(data);
 					firebase.auth().signOut();
+					window.location = '/signin'
+					
 				}).catch((error)=>{
 					const toast = document.getElementById("snackbar");
 					toast.className = "show";
@@ -55,8 +52,8 @@ function signUp() {
 			.catch((error) => {
 				document.getElementById("overlay").style.display = "none"
 				
-				var errorCode = error.code;
-				var errorMessage = error.message;
+				let errorCode = error.code;
+				let errorMessage = error.message;
 				console.log(errorMessage);
 				const toast = document.getElementById("snackbar");
 				toast.className = "show";

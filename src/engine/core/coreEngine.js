@@ -28,14 +28,8 @@ export class CoreEngine {
         this._entities = document.getElementById(this._entityContainerId);
 
         this._posForm = document.getElementById("positionForm");
-        this._rotForm = new Form("rotationForm");
-
-        this._posForm.onsubmit = (ev) => {
-            const values = Array.from(document.querySelectorAll("#positionForm input")).reduce(
-                (acc, input) => ({...acc, [input.id]: input.value}),
-                {}
-            );
-        };
+        this._rotForm = document.getElementById("rotationForm");
+        this._scaleForm = document.getElementById("scaleForm");
 
         this.currentMode = EngineModes.designing;
 
@@ -78,6 +72,111 @@ export class CoreEngine {
         this.games[this.currentGameIndex].scenes[0].addChild(surface_5);
     }
 
+    initializeEntitySettings() {
+        // this._posForm = new Form("rotationForm");
+        // this._rotForm = new Form("rotationForm");
+        // this._scaleForm = new Form("scaleForm");
+        const scene = this.games[this.currentGameIndex].getCurrentScene();
+
+        window.addEventListener("entityChanged", (e) => {
+            if (scene) {
+                const index = scene.children.findIndex((e) => {
+                    if (e.name === scene.selectedEntityName) return true;
+                });
+
+                if (index > -1) {
+                    // position
+                    document.getElementById("xPosition").value = scene.children[index].transform.position.x.toFixed(2);
+                    document.getElementById("yPosition").value = scene.children[index].transform.position.y.toFixed(2);
+
+                    // Scale
+                    document.getElementById("xScale").value = scene.children[index].transform.scale.x.toFixed(2);
+                    document.getElementById("yScale").value = scene.children[index].transform.scale.y.toFixed(2);
+
+                    // Rotation
+                    document.getElementById("rotationDeg").value = scene.children[index].transform.rotation.toFixed(2);
+                }
+            }
+        });
+
+        this._posForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
+            ev.preventDefault();
+            const fData = new FormData(ev.target);
+            const formValues = {};
+
+            for (let keyval of fData.entries()) {
+                formValues[keyval[0]] = keyval[1];
+            }
+
+            if (!fData) {
+                alert("Invalid form submitted");
+            }
+
+            if (scene) {
+                const index = scene.children.findIndex((e) => {
+                    if (e.name === scene.selectedEntityName) return true;
+                });
+
+                if (index > -1) {
+                    scene.children[index].transformEntity(parseFloat(formValues.x), parseFloat(formValues.y));
+                }
+            }
+        });
+
+        this._rotForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
+            ev.preventDefault();
+            const fData = new FormData(ev.target);
+            const formValues = {};
+
+            for (let keyval of fData.entries()) {
+                formValues[keyval[0]] = keyval[1];
+            }
+
+            if (!fData) {
+                alert("Invalid form submitted");
+            }
+
+            if (scene) {
+                const index = scene.children.findIndex((e) => {
+                    if (e.name === scene.selectedEntityName) return true;
+                });
+
+                if (index > -1) {
+                    scene.children[index].rotateEntity(this.degrees_to_radians(parseFloat(formValues.degrees)));
+                }
+            }
+        });
+
+        this._scaleForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
+            ev.preventDefault();
+            const fData = new FormData(ev.target);
+            const formValues = {};
+
+            for (let keyval of fData.entries()) {
+                formValues[keyval[0]] = keyval[1];
+            }
+
+            if (!fData) {
+                alert("Invalid form submitted");
+            }
+
+            if (scene) {
+                const index = scene.children.findIndex((e) => {
+                    if (e.name === scene.selectedEntityName) return true;
+                });
+
+                if (index > -1) {
+                    scene.children[index].scaleEntity(parseFloat(formValues.x), parseFloat(formValues.y));
+                }
+            }
+        });
+    }
+
+    degrees_to_radians(degrees) {
+        var pi = Math.PI;
+        return degrees * (pi / 180);
+    }
+
     init() {
         const renderer = PIXI.autoDetectRenderer({
             antalias: true,
@@ -111,9 +210,9 @@ export class CoreEngine {
         this.games[this.currentGameIndex].scenes.forEach((scene) => {
             this.stage.addChild(scene);
         });
+        this.initializeEntitySettings();
 
         // this.loadEntitiesToWorkspace();
-
         PIXI.Ticker.shared.add(this.render);
     }
 
@@ -162,8 +261,6 @@ export class CoreEngine {
         button.action = (ev) => {
             ev.preventDefault();
             const create = ev.target.id;
-
-            console.log(create);
             this.createGameEntity(PIXI.utils.TextureCache[create]);
         };
         buttons.push(button);
@@ -210,7 +307,7 @@ export class CoreEngine {
         const gameEntity = new AnimatableEntity(texture, "untitled" + index);
         gameEntity.x = this.renderer.screen.width / 2;
         gameEntity.y = this.renderer.screen.height / 2;
-        this.games[this.currentGameIndex].scenes[0].setSelectedEntityName(gameEntity.name);
+        this.games[this.currentGameIndex].getCurrentScene().setSelectedEntityName(gameEntity.name);
         this.games[this.currentGameIndex].scenes[0].addChild(gameEntity);
     }
 

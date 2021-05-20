@@ -46,8 +46,6 @@ export class CoreEngine {
         this.stopGame = this.stopGame.bind(this);
     }
 
-<<<<<<< HEAD
-=======
     addTestObjects() {
         const surface_1 = new BaseEntity(PIXI.utils.TextureCache["redTile"], "red");
         surface_1.x = 20;
@@ -180,7 +178,6 @@ export class CoreEngine {
         return degrees * (pi / 180);
     }
 
->>>>>>> 17e24750e2c6b81a9f2acb5f707bd5122ce23cd4
     init() {
         const renderer = PIXI.autoDetectRenderer({
             antalias: true,
@@ -211,10 +208,6 @@ export class CoreEngine {
         });
         this.initializeEntitySettings();
 
-<<<<<<< HEAD
-=======
-        // this.loadEntitiesToWorkspace();
->>>>>>> 17e24750e2c6b81a9f2acb5f707bd5122ce23cd4
         PIXI.Ticker.shared.add(this.render);
     }
 

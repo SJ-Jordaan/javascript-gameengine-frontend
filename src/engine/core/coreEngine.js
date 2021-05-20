@@ -1,13 +1,19 @@
-'use strict';
+"use strict";
 
-import { AnimatableEntity } from "./animatableEntity";
-import { BaseEntity } from "./baseEntity";
+import {AnimatableEntity} from "./animatableEntity";
+import {BaseEntity} from "./baseEntity";
 import Game from "./game";
+import EventType from "/public/scripts/common/constants/eventType.js";
+import workspaceNavigation from "/public/scripts/workspaceNav.js";
+import CardBuilder from "/public/scripts/view-components/cards/cardBuilder.js";
+import {Card, Button, PresetColours, PresetFontSize} from "/public/scripts/view-components/cards/card.js";
+import Form from "/public/scripts/common/utility/forms/form.js";
+import {EventTypeAndHandler} from "/public/scripts/common/utility/events/events.js";
 
 const EngineModes = {
     designing: "Designing",
     playing: "Playing",
-    paused: "Paused"
+    paused: "Paused",
 };
 
 Object.freeze(EngineModes);
@@ -18,6 +24,19 @@ export class CoreEngine {
         this.stage = new PIXI.Container();
         this.currentGameIndex = 0;
         this.games = [];
+        this._entityContainerId = "entities";
+        this._entities = document.getElementById(this._entityContainerId);
+
+        this._posForm = document.getElementById("positionForm");
+        this._rotForm = new Form("rotationForm");
+
+        this._posForm.onsubmit = (ev) => {
+            const values = Array.from(document.querySelectorAll("#positionForm input")).reduce(
+                (acc, input) => ({...acc, [input.id]: input.value}),
+                {}
+            );
+        };
+
         this.currentMode = EngineModes.designing;
 
         //methods
@@ -32,7 +51,7 @@ export class CoreEngine {
         this.stopGame = this.stopGame.bind(this);
     }
 
-    addTestObjects(){
+    addTestObjects() {
         const surface_1 = new BaseEntity(PIXI.utils.TextureCache["redTile"], "red");
         surface_1.x = 20;
         surface_1.y = 20;
@@ -71,18 +90,17 @@ export class CoreEngine {
 
         const engineView = document.getElementById("engine-view");
         engineView.appendChild(renderer.view);
-
-        const uploadBtn = document.querySelector('#upload-button');
-        uploadBtn.addEventListener('change', this.loadTexturesFromLocal, false);
+        const uploadBtn = document.querySelector("#upload-button");
+        uploadBtn.addEventListener("change", this.loadTexturesFromLocal, false);
 
         const createBtn = document.querySelector("#create-sprite-button");
-        createBtn.addEventListener('click', this.createGameEntity, false);
+        createBtn.addEventListener("click", this.createGameEntity, false);
 
         const playBtn = document.querySelector("#play-button");
-        playBtn.addEventListener('click', this.playGame, false);
+        playBtn.addEventListener("click", this.playGame, false);
 
         const stopBtn = document.querySelector("#stop-button");
-        stopBtn.addEventListener('click', this.stopGame, false);
+        stopBtn.addEventListener("click", this.stopGame, false);
 
         //Pre-load default assets here (Assets that come with the engine)
         this.loader.baseUrl = "/public/assets/";
@@ -90,16 +108,18 @@ export class CoreEngine {
         this.loadDefaultAssets();
         this.createGame("Test Game");
 
-        this.games[this.currentGameIndex].scenes.forEach(scene => {
+        this.games[this.currentGameIndex].scenes.forEach((scene) => {
             this.stage.addChild(scene);
         });
+
+        // this.loadEntitiesToWorkspace();
 
         PIXI.Ticker.shared.add(this.render);
     }
 
-    render(delta){
+    render(delta) {
         this.renderer.clear();
-        if(this.games[this.currentGameIndex].mode === "play"){
+        if (this.games[this.currentGameIndex].mode === "play") {
             this.games[this.currentGameIndex].play(delta);
         }
         this.renderer.render(this.stage);
@@ -117,8 +137,41 @@ export class CoreEngine {
             .add("orangeTile", "images/orangeTile.png")
             .add("background", "images/background.jpg");
 
+        this.loadEntityToWorkspace("blueTile", "images/blueTile.png");
+
         this.loader.onComplete.add(this.addTestObjects);
         this.loader.load();
+    }
+
+    loadEntityToWorkspace(name, path) {
+        const assetPath = "/public/assets/" + path;
+        const builder = new CardBuilder();
+
+        const card = new Card();
+        card.title = name;
+        card.image = assetPath;
+        card.colour = PresetColours.Light;
+
+        var buttons = new Array();
+
+        const button = new Button();
+        button.title = "Add";
+        button.id = name;
+        button.colour = PresetColours.Primary;
+        button.fontSize = PresetFontSize.Smaller;
+        button.action = (ev) => {
+            ev.preventDefault();
+            const create = ev.target.id;
+
+            console.log(create);
+            this.createGameEntity(PIXI.utils.TextureCache[create]);
+        };
+        buttons.push(button);
+
+        card.buttons = buttons;
+
+        let cardWrapper = builder.createInlineCard(card);
+        this._entities.appendChild(cardWrapper);
     }
 
     //Event handler for reading images from the local machine and uploading them
@@ -134,7 +187,7 @@ export class CoreEngine {
                 img.src = reader.result;
                 let texture = new PIXI.BaseTexture(img.src);
                 PIXI.Texture.addToCache(texture, input.files[i].name);
-            }
+            };
             reader.readAsDataURL(input.files[i]);
         }
     }
@@ -145,28 +198,27 @@ export class CoreEngine {
         this.games.push(game);
     }
 
-    deleteGame(gameName) {
-    }
+    deleteGame(gameName) {}
 
-    saveGame() {
-    }
+    saveGame() {}
 
-    createGameEntity() {
+    createGameEntity(texture = PIXI.utils.TextureCache["blueTile"]) {
         //Creates an entity at the center of the current game scene with the default
         //texture and default title
         const index = this.games[this.currentGameIndex].scenes[0].children.length;
 
-        const gameEntity = new AnimatableEntity(PIXI.utils.TextureCache["blueTile"], "untitled" + index);
+        const gameEntity = new AnimatableEntity(texture, "untitled" + index);
         gameEntity.x = this.renderer.screen.width / 2;
         gameEntity.y = this.renderer.screen.height / 2;
+        this.games[this.currentGameIndex].scenes[0].setSelectedEntityName(gameEntity.name);
         this.games[this.currentGameIndex].scenes[0].addChild(gameEntity);
     }
 
-    playGame(){
+    playGame() {
         this.games[this.currentGameIndex].setGameMode("play");
     }
 
-    stopGame(){
+    stopGame() {
         this.games[this.currentGameIndex].setGameMode("design");
     }
-};
+}

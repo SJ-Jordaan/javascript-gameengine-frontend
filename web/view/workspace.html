@@ -255,12 +255,11 @@
                             aria-hidden="true"></i>
                     </button>
                 </aside>
-                <section style="background-color: blue; width: 100%; height: 100%;">
-
+                <section class="workspace width-100 height-100">
+                    <canvas width="500" height="350"></canvas>
                 </section>
             </section>
         </section>
-
     </main>
     <script type="module">
         import EventType from "/public/scripts/common/constants/eventType.js"
@@ -275,7 +274,7 @@
         const builder = new CardBuilder();
         const card = new Card();
         card.title = "Entity1";
-        card.image = "/public/images/tile.png";
+        card.image = "/public/images/icons/favicon-32x32.png";
         card.colour = PresetColours.Light;
 
         var buttons = new Array();

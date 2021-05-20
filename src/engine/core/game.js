@@ -17,13 +17,6 @@ export default class Game {
         this.scenes = [];
         this.currentSceneIndex = 0;
         this.mode = GameMode.design;
-
-        //methods
-        this.addBackground = this.addBackground.bind(this);
-        this.play = this.play.bind(this);
-        this.init = this.init.bind(this);
-        this.stop = this.stop.bind(this);
-        this.update = this.update.bind(this);
     }
 
     //Initializes a game with a single blank scene
@@ -69,9 +62,19 @@ export default class Game {
         const children = this.scenes[this.currentSceneIndex].children;
         children.forEach((element) => {
             if (element instanceof AnimatableEntity) {
-                element.transformX(1);
+                element.moveX(1);
                 freeFall(element, delta);
             }
         });
+    }
+
+    getCurrentSelectedEntity(){
+        const index = this.scenes[0].children.findIndex((e) => {
+            if (e.name === this.scenes[0].selectedEntityName) return true;
+        });
+
+        if(index > -1){
+            return this.scenes[this.currentSceneIndex].children[index];
+        }
     }
 }

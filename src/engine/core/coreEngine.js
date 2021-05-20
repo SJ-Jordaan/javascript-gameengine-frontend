@@ -1,14 +1,8 @@
-"use strict";
-
 import { AnimatableEntity } from "./animatableEntity";
-import { BaseEntity } from "./baseEntity";
 import Game from "./game";
 import EventType from "/public/scripts/common/constants/eventType.js";
-import workspaceNavigation from "/public/scripts/workspaceNav.js";
 import CardBuilder from "/public/scripts/view-components/cards/cardBuilder.js";
 import { Card, Button, PresetColours, PresetFontSize } from "/public/scripts/view-components/cards/card.js";
-import Form from "/public/scripts/common/utility/forms/form.js";
-import { EventTypeAndHandler } from "/public/scripts/common/utility/events/events.js";
 
 const EngineModes = {
     designing: "Designing",
@@ -24,12 +18,6 @@ export class CoreEngine {
         this.stage = new PIXI.Container();
         this.currentGameIndex = 0;
         this.games = [];
-        this._entityContainerId = "entities";
-        this._entities = document.getElementById(this._entityContainerId);
-
-        this._posForm = document.getElementById("positionForm");
-        this._rotForm = document.getElementById("rotationForm");
-        this._scaleForm = document.getElementById("scaleForm");
 
         this.currentMode = EngineModes.designing;
 
@@ -44,138 +32,91 @@ export class CoreEngine {
         this.render = this.render.bind(this);
         this.playGame = this.playGame.bind(this);
         this.stopGame = this.stopGame.bind(this);
+        // this.initializeEntitySettings = this.initializeEntitySettings.bind(this);
+        this.translateEntityHandler = this.translateEntityHandler.bind(this);
+        this.scaleEntityHandler = this.scaleEntityHandler.bind(this);
+        this.rotateEntityHandler = this.rotateEntityHandler.bind(this);
+        this.entityTransformedHandler = this.entityTransformedHandler.bind(this);
     }
 
-    addTestObjects() {
-        const surface_1 = new BaseEntity(PIXI.utils.TextureCache["redTile"], "red");
-        surface_1.x = 20;
-        surface_1.y = 20;
-        this.games[this.currentGameIndex].scenes[0].addChild(surface_1);
+    //Transformations Event Handlers
+    translateEntityHandler(ev){
+        ev.preventDefault();
+            const fData = new FormData(ev.target);
+            const formValues = {};
 
-        const surface_2 = new BaseEntity(PIXI.utils.TextureCache["blackTile"], "black");
-        surface_2.x = 20;
-        surface_2.y = 20;
-        this.games[this.currentGameIndex].scenes[0].addChild(surface_2);
+            for (let keyval of fData.entries()) {
+                formValues[keyval[0]] = keyval[1];
+            }
 
-        const surface_3 = new BaseEntity(PIXI.utils.TextureCache["yellowTile"], "yellow");
-        surface_3.x = 20;
-        surface_3.y = 20;
-        this.games[this.currentGameIndex].scenes[0].addChild(surface_3);
-
-        const surface_4 = new BaseEntity(PIXI.utils.TextureCache["brownTile"], "brown");
-        surface_4.x = 20;
-        surface_4.y = 20;
-        this.games[this.currentGameIndex].scenes[0].addChild(surface_4);
-
-        const surface_5 = new BaseEntity(PIXI.utils.TextureCache["greenTile"], "green");
-        surface_5.x = 20;
-        surface_5.y = 20;
-        this.games[this.currentGameIndex].scenes[0].addChild(surface_5);
+            this.games[this.currentGameIndex].getCurrentSelectedEntity().translateEntity(parseFloat(formValues.x), parseFloat(formValues.y));
     }
 
-    initializeEntitySettings() {
-        // this._posForm = new Form("rotationForm");
-        // this._rotForm = new Form("rotationForm");
-        // this._scaleForm = new Form("scaleForm");
-        const scene = this.games[this.currentGameIndex].getCurrentScene();
+    rotateEntityHandler(ev){
+        ev.preventDefault();
+        const fData = new FormData(ev.target);
+        const formValues = {};
 
-        window.addEventListener("entityChanged", (e) => {
-            if (scene) {
-                const index = scene.children.findIndex((e) => {
-                    if (e.name === scene.selectedEntityName) return true;
-                });
+        for (let keyval of fData.entries()) {
+            formValues[keyval[0]] = keyval[1];
+        }
 
-                if (index > -1) {
-                    // position
-                    document.getElementById("xPosition").value = scene.children[index].transform.position.x.toFixed(2);
-                    document.getElementById("yPosition").value = scene.children[index].transform.position.y.toFixed(2);
+        console.log(formValues);
 
-                    // Scale
-                    document.getElementById("xScale").value = scene.children[index].transform.scale.x.toFixed(2);
-                    document.getElementById("yScale").value = scene.children[index].transform.scale.y.toFixed(2);
+        this.games[this.currentGameIndex].getCurrentSelectedEntity().rotateEntity(parseFloat(formValues.degrees));
+    }
 
-                    // Rotation
-                    document.getElementById("rotationDeg").value = scene.children[index].transform.rotation.toFixed(2);
-                }
-            }
-        });
+    scaleEntityHandler(ev){
+        ev.preventDefault();
+        const fData = new FormData(ev.target);
+        const formValues = {};
 
-        this._posForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
-            ev.preventDefault();
-            const fData = new FormData(ev.target);
-            const formValues = {};
+        for (let keyval of fData.entries()) {
+            formValues[keyval[0]] = keyval[1];
+        }
 
-            for (let keyval of fData.entries()) {
-                formValues[keyval[0]] = keyval[1];
-            }
+        this.games[this.currentGameIndex].getCurrentSelectedEntity().scaleEntity(parseFloat(formValues.x), parseFloat(formValues.y))
+    }
 
-            if (!fData) {
-                alert("Invalid form submitted");
-            }
+    entityTransformedHandler(){
+        const selectedEntity = this.games[this.currentGameIndex].getCurrentSelectedEntity();
+        if(selectedEntity){
+            // position
+         document.getElementById("xPosition").value = selectedEntity.transform.position.x.toFixed(2);
+         document.getElementById("yPosition").value = selectedEntity.transform.position.y.toFixed(2);
 
-            if (scene) {
-                const index = scene.children.findIndex((e) => {
-                    if (e.name === scene.selectedEntityName) return true;
-                });
+         // Scale
+         document.getElementById("xScale").value = selectedEntity.transform.scale.x.toFixed(2);
+         document.getElementById("yScale").value = selectedEntity.transform.scale.y.toFixed(2);
 
-                if (index > -1) {
-                    scene.children[index].transformEntity(parseFloat(formValues.x), parseFloat(formValues.y));
-                }
-            }
-        });
-
-        this._rotForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
-            ev.preventDefault();
-            const fData = new FormData(ev.target);
-            const formValues = {};
-
-            for (let keyval of fData.entries()) {
-                formValues[keyval[0]] = keyval[1];
-            }
-
-            if (!fData) {
-                alert("Invalid form submitted");
-            }
-
-            if (scene) {
-                const index = scene.children.findIndex((e) => {
-                    if (e.name === scene.selectedEntityName) return true;
-                });
-
-                if (index > -1) {
-                    scene.children[index].rotateEntity(this.degrees_to_radians(parseFloat(formValues.degrees)));
-                }
-            }
-        });
-
-        this._scaleForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
-            ev.preventDefault();
-            const fData = new FormData(ev.target);
-            const formValues = {};
-
-            for (let keyval of fData.entries()) {
-                formValues[keyval[0]] = keyval[1];
-            }
-
-            if (!fData) {
-                alert("Invalid form submitted");
-            }
-
-            if (scene) {
-                const index = scene.children.findIndex((e) => {
-                    if (e.name === scene.selectedEntityName) return true;
-                });
-
-                if (index > -1) {
-                    scene.children[index].scaleEntity(parseFloat(formValues.x), parseFloat(formValues.y));
-                }
-            }
-        });
+         // Rotation
+         document.getElementById("rotationDeg").value = selectedEntity.transform.rotation.toFixed(2)
+        }
     }
 
     degrees_to_radians(degrees) {
         var pi = Math.PI;
         return degrees * (pi / 180);
+    }
+
+    setupEventListeners(){
+        const playButton = document.querySelector("#play-button");
+        playButton.addEventListener("click", this.playGame, false);
+
+        const stopButton = document.querySelector("#stop-button");
+        stopButton.addEventListener("click", this.stopGame, false);
+
+         this._entityContainerId = "entities";
+        this._entities = document.getElementById(this._entityContainerId);
+
+        this._positionForm = document.getElementById("positionForm");
+        this._rotationForm = document.getElementById("rotationForm");
+        this._scaleForm = document.getElementById("scaleForm");
+
+        window.addEventListener("entityChanged", this.entityTransformedHandler);
+        this._positionForm.addEventListener(EventType.FORM.SUBMIT, this.translateEntityHandler);
+        this._rotationForm.addEventListener(EventType.FORM.SUBMIT, this.rotateEntityHandler);
+        this._scaleForm.addEventListener(EventType.FORM.SUBMIT, this.scaleEntityHandler);
     }
 
     init() {
@@ -191,11 +132,7 @@ export class CoreEngine {
         const engineView = document.getElementById("engine-view");
         engineView.appendChild(renderer.view);
 
-        const playBtn = document.querySelector("#play-button");
-        playBtn.addEventListener("click", this.playGame, false);
-
-        const stopBtn = document.querySelector("#stop-button");
-        stopBtn.addEventListener("click", this.stopGame, false);
+        this.setupEventListeners();
 
         //Pre-load default assets here (Assets that come with the engine)
         this.loader.baseUrl = "/public/assets/";
@@ -206,7 +143,7 @@ export class CoreEngine {
         this.games[this.currentGameIndex].scenes.forEach((scene) => {
             this.stage.addChild(scene);
         });
-        this.initializeEntitySettings();
+        // this.initializeEntitySettings();
 
         PIXI.Ticker.shared.add(this.render);
     }
@@ -298,11 +235,42 @@ export class CoreEngine {
 
     deleteGame(gameName) { }
 
-    saveGame() { }
+    saveGame() { 
+        const gameState = {};
+        this.games[this.currentGameIndex].scenes.forEach(scene => {
+            const sceneProperties = {
+                name: scene.name,
+                height: scene.height,
+                width: scene.width,
+                gravity: scene.gravity,
+                children: [],
+            };
+
+            let entityProperties;
+            gameState[scene.name] = sceneProperties;
+
+            scene.children.forEach(child => {
+                let scale = {x: child.scale._x, y: child.scale._y};
+                entityProperties = {
+                    name: child.name,
+                    type: child.type,
+                    xPosition: child.x,
+                    yPosition: child.y,
+                    mass: child.mass,
+                    acceleration: child.acceleration,
+                    texture: child._texture.textureCacheIds,
+                    scale: scale,
+                    rotation: child.angle,
+                };
+                gameState[scene.name].children.push(entityProperties);
+                console.log(child.transform);
+            });
+        });
+
+        //Send save request from here JSON.stringify(gameState)
+    }
 
     createGameEntity(texture = PIXI.utils.TextureCache["blueTile"]) {
-        //Creates an entity at the center of the current game scene with the default
-        //texture and default title
         const index = this.games[this.currentGameIndex].scenes[0].children.length;
 
         const gameEntity = new AnimatableEntity(texture, "untitled" + index);
@@ -313,7 +281,9 @@ export class CoreEngine {
     }
 
     playGame() {
-        this.games[this.currentGameIndex].setGameMode("play");
+        // this.games[this.currentGameIndex].setGameMode("play");
+        // console.log(this.games[this.currentGameIndex]);
+        this.saveGame();
     }
 
     stopGame() {

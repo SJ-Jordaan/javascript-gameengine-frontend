@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/public/css/main.css">
     <link rel="stylesheet" type="text/css" href="/public/css/main-navbar.css">
     <link rel="stylesheet" type="text/css" href="/public/css/main-searchbar.css">
+    <link rel="stylesheet" type="text/css" href="/public/css/accordion.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>LAME|Engine2D</title>
 </head>
@@ -46,6 +47,38 @@
                 </div>
                 <section class="sidebar-content">
                     <h2><span class="uppercase">Entities</span></h2>
+                    <form name="filterEntities" id="filterEntitiesForm">
+                        <fieldset
+                            class="nav-form-input-inline-container input-width-auto m-top-1 inline-fieldset display-flex-col">
+                            <legend>Entity Type</legend>
+                            <section class="width-100">
+                                <select class="nav-selector width-100" name="type" id="entityType"
+                                    form="filterEntitiesForm">
+                                    <option value="all">All</option>
+                                    <option value="character">Characters</option>
+                                    <option value="Surface">Surfaces</option>
+                                    <option value="Decorative">Decorative</option>
+                                </select>
+                            </section>
+                            <button type="submit" class="btn float-right"><i class="fa fa-refresh"
+                                    aria-hidden="true"></i>
+                            </button>
+                        </fieldset>
+                    </form>
+                    <button class="primary-btn-sm primary-btn-outline width-100 m-top-1">Create New Entity</button>
+                    <section id="entities" class="m-top-1 display-flex-col">
+                        <!-- <section class="display-flex-row w-100 card-temp" style="align-items: center; ">
+                            <img src="/public/images/tile.png" width="32px">
+                            <div class="display-flex-row m-left-3 height-100 width-100" style="align-items:center">
+                                <a>Entity</a>
+                                <button class="primary-btn-sm m-left-auto">Add</button>
+                                <button class="primary-btn-sm m-left-auto">Add</button>
+                                <button class="primary-btn-sm m-left-auto">Add</button>
+                            </div>
+                        </section> -->
+                        <!-- Content is generated dynamically -->
+
+                    </section>
                 </section>
             </aside>
             <aside class="sidebar" id="sceneSettings">
@@ -56,10 +89,54 @@
                 </div>
                 <section class="sidebar-content">
                     <h2><span class="uppercase">Scene Manager</span></h2>
+                    <form name="changeScene" id="changeSceneForm">
+                        <fieldset
+                            class="nav-form-input-inline-container input-width-auto m-top-1 inline-fieldset display-flex-col">
+                            <legend>Scenes</legend>
+                            <section class="width-100">
+                                <select class="nav-selector width-100" name="scenes" id="scenes" form="changeScene">
+                                    <option value="scene1">Scene 1</option>
+                                    <option value="scene2">Scene 2</option>
+                                    <option value="scene3">Scene 3</option>
+                                    <option value="scene4">Scene 4</option>
+                                </select>
+                            </section>
+                            <button type="submit" class="btn float-right"><i class="fa fa-refresh"
+                                    aria-hidden="true"></i>
+                            </button>
+                        </fieldset>
+                    </form>
+                    <form name="createScene" id="createSceneForm" class="m-top-3">
+                        <fieldset class="display-flex-col default-fieldset" style="padding: 10px;">
+                            <legend>Create Scene</legend>
+                            <section class="m-top-1 display-flex-row">
+                                <label class="nav-form-label" for="sceneName">Name</label>
+                                <input class="nav-form-input-inline " type="text" id="sceneName" name="sceneName">
+                            </section>
+                            <section class="m-top-1 display-flex-row">
+                                <label class="nav-form-label" for="sceneGravity">Gravity</label>
+                                <input class="nav-form-input-inline input-width-auto" type="number" id="sceneGravity"
+                                    name="sceneGravity">
+                            </section>
+                            <fieldset class="m-top-1 inline-fieldset">
+                                <legend>Scene Size</legend>
+                                <section>
+                                    <label for="sceneWidth">W</label>
+                                    <input type="number" id="sceneWidth" class="input-w-60">
+                                </section>
+                                <section class="m-left-2 m-right-auto">
+                                    <label for="sceneHeight">H</label>
+                                    <input type="number" id="sceneHeight" class="input-w-60">
+                                </section>
+                            </fieldset>
+                            <section class="m-top-2">
+                                <button class="primary-btn">create</button>
+                            </section>
+                    </form>
                 </section>
             </aside>
             <aside id="settingsBar" class="sidebar-right">
-                <div class="bottombar-header">
+                <div class="sidebar-header">
                     <button class="sidebar-close-btn-right" id="settingsBarToggleOff"><i class="fa fa-times"
                             aria-hidden="true"></i>
                     </button>
@@ -70,35 +147,93 @@
                     <hr class="full-hr">
                     <div class="accordion">
                         <section>
-                            <input type="radio" name="transform_accordion" id="sectionTransform" class="accordionInput">
+                            <input type="checkbox" name="transform_accordion" id="sectionTransform"
+                                class="accordionInput">
                             <label for="sectionTransform" class="accordionLabel"><span
                                     class="uppercase">Transform</span></label>
-                            <div>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
-                                    dolor. Aenean massa. Cum sociis
-                                    natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec
-                                    quam felis, ultricies nec, pellentesque
-                                    eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla
-                                    vel, aliquet nec, vulputate eget,
-                                    arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum
-                                    felis eu pede mollis pretium.
-                                    Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate
-                                    eleifend tellus. Aenean leo ligula,
-                                    porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in,
-                                    viverra quis, feugiat a, tellus.
-                                    Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet.
-                                    Etiam ultricies nisi vel augue.
-                                    Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus,
-                                    tellus eget condimentum rhoncus, sem
-                                    quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit
-                                    vel, luctus pulvinar, hendrerit id,
-                                    lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero
-                                    venenatis faucibus. Nullam quis ante.
-                                    Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit
-                                    amet nibh. Donec sodales sagittis
-                                    magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,
-                                </p>
+                            <div class="accordionContent">
+                                <form name="positionForm">
+                                    <fieldset id="positionField" class="inline-fieldset">
+                                        <legend>Position</legend>
+                                        <section>
+                                            <label for="xPosition">X</label>
+                                            <input type="text" id="xPosition" class="single-input ">
+                                        </section>
+                                        <section class="m-left-2 m-right-auto">
+                                            <label for="yPosition">Y</label>
+                                            <input type="text" id="yPosition" class="single-input ">
+                                        </section>
+                                        <button type="submit" class="btn float-right"><i class="fa fa-refresh"
+                                                aria-hidden="true"></i>
+                                        </button>
+                                    </fieldset>
+                                </form>
+                                <form name="rotationForm">
+                                    <fieldset id="rotationField" class="inline-fieldset">
+                                        <legend>Rotation</legend>
+                                        <section>
+                                            <label for="xRotation">X</label>
+                                            <input type="text" id="xRotation" class="single-input ">
+                                        </section>
+                                        <section class="m-left-2 m-right-auto">
+                                            <label for="yRotation">Y</label>
+                                            <input type="text" id="yRotation" class="single-input ">
+                                        </section>
+                                        <button type="submit" class="btn float-right"><i class="fa fa-refresh"
+                                                aria-hidden="true"></i>
+                                        </button>
+                                    </fieldset>
+                                </form>
+                                <form name="scaleForm">
+                                    <fieldset id="scaleField" class="inline-fieldset">
+                                        <legend>Scale</legend>
+                                        <section>
+                                            <label for="xScale">X</label>
+                                            <input type="text" id="xScale" class="single-input ">
+                                        </section>
+                                        <section class="m-left-2 m-right-auto">
+                                            <label for="yScale">Y</label>
+                                            <input type="text" id="yScale" class="single-input ">
+                                        </section>
+                                        <button type="submit" class="btn float-right"><i class="fa fa-refresh"
+                                                aria-hidden="true"></i>
+                                        </button>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </section>
+                        <section>
+                            <input type="checkbox" name="physics_accordion" id="sectionPhysics" class="accordionInput">
+                            <label for="sectionPhysics" class="accordionLabel"><span
+                                    class="uppercase">Physics</span></label>
+                            <div class="accordionContent">
+                                <form name="physicsForm" class="display-flex-col">
+                                    <fieldset class="nav-form-input-inline-container input-width-auto">
+                                        <label class="nav-form-label" for="mass">Mass</label>
+                                        <input class="nav-form-input-inline" type="number" id="mass" name="mass">
+                                    </fieldset>
+                                    <fieldset class="nav-form-input-inline-container input-width-auto m-top-1">
+                                        <label class="nav-form-label" for="velocity">Velocity</label>
+                                        <input class="nav-form-input-inline" type="number" id="velocity"
+                                            name="velocity">
+                                    </fieldset>
+                                    <fieldset class="nav-form-input-inline-container input-width-auto m-top-1">
+                                        <label class="nav-form-label" for="acceleration">Accel.</label>
+                                        <input class="nav-form-input-inline" type="number" id="acceleration"
+                                            name="acceleration">
+                                    </fieldset>
+                                    <fieldset class="m-top-1" style="width: 50%; right: 0;">
+                                        <button class="primary-btn">update</button>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </section>
+                        <section>
+                            <input type="checkbox" name="logic_accordion" id="sectionLogic" class="accordionInput">
+                            <label for="sectionLogic" class="accordionLabel"><span
+                                    class="uppercase">Logic</span></label>
+                            <div class="accordionContent">
+
                             </div>
                         </section>
                     </div>
@@ -120,93 +255,46 @@
                             aria-hidden="true"></i>
                     </button>
                 </aside>
-                <section style="background-color: blue; width: 100%; height: 100%;">
-
+                <section class="workspace width-100 height-100">
+                    <canvas width="500" height="350"></canvas>
                 </section>
             </section>
         </section>
-
     </main>
     <script type="module">
         import EventType from "/public/scripts/common/constants/eventType.js"
+        import workspaceNavigation from "/public/scripts/workspaceNav.js"
+        import CardBuilder from "/public/scripts/view-components/cards/cardBuilder.js";
+        import { Card, Button, PresetColours, PresetFontSize } from "/public/scripts/view-components/cards/card.js";
 
-        const sceneSettings = document.getElementById("sceneSettings");
-        const entityExplorer = document.getElementById("entityExplorer");
-        const settingsBar = document.getElementById("settingsBar");
-        const main = document.getElementById("main");
+        workspaceNavigation();
 
-        const entitySideBarToggleOn = document.getElementById("entitySidebarToggleOn");
-        const sceneSettingsToggleOn = document.getElementById("sceneSettingsToggleOn");
+        const entities = document.getElementById("entities");
 
-        const settingsBarToggleOn = document.getElementById("settingsBarToggleOn")
-        const settingsBarToggleOff = document.getElementById("settingsBarToggleOff")
+        const builder = new CardBuilder();
+        const card = new Card();
+        card.title = "Entity1";
+        card.image = "/public/images/icons/favicon-32x32.png";
+        card.colour = PresetColours.Light;
 
-        const synchronize = document.getElementById("synchronize");
-        synchronize.addEventListener(EventType.MOUSE.CLICK, (event) => {
-            alert("Synchronized successfully");
-        });
+        var buttons = new Array();
 
-        const save = document.getElementById("save");
-        save.addEventListener(EventType.MOUSE.CLICK, (event) => {
-            alert("Saved successfully");
-        });
-
-        settingsBarToggleOn.addEventListener(EventType.MOUSE.CLICK, (event) => {
-            settingsBar.style.width = "250px"
-            main.style.marginRight = "250px";
-            settingsBarToggleOn.style.background = "gray";
-        });
-
-        settingsBarToggleOff.addEventListener(EventType.MOUSE.CLICK, (event) => {
-            settingsBar.style.width = "0px"
-            main.style.marginRight = "0px";
-            settingsBarToggleOn.style.background = "black";
-        })
-
-        entitySideBarToggleOn.addEventListener(EventType.MOUSE.CLICK, (event) => {
-            if (entityExplorer.style.width.indexOf("250") > -1) {
-                entityExplorer.style.zIndex = 5;
-                sceneSettings.style.zIndex = 4;
-            } else {
-                entityExplorer.style.width = "250px";
-                entityExplorer.style.zIndex = 5;
-                sceneSettings.style.zIndex = 4;
-            }
-            main.style.marginLeft = "250px";
-            entitySideBarToggleOn.style.background = "gray";
-            sceneSettingsToggleOn.style.background = "black";
-        });
-
-
-        sceneSettingsToggleOn.addEventListener(EventType.MOUSE.CLICK, (event) => {
-            if (sceneSettings.style.width.indexOf("250") > -1) {
-                sceneSettings.style.zIndex = 5;
-                entityExplorer.style.zIndex = 4;
-            } else {
-                sceneSettings.style.width = "250px";
-                sceneSettings.style.zIndex = 5;
-                entityExplorer.style.zIndex = 4;
-            }
-            main.style.marginLeft = "250px";
-
-            sceneSettingsToggleOn.style.background = "gray"
-            entitySideBarToggleOn.style.background = "black";
-        });
-
-        const sceneSettingsToggleOff = document.getElementById("sceneSettingsToggleOff");
-        sceneSettingsToggleOff.addEventListener(EventType.MOUSE.CLICK, (event) => { closeMenus(); });
-
-        const entitySideBarToggleOff = document.getElementById("entitySidebarToggleOff");
-        entitySideBarToggleOff.addEventListener(EventType.MOUSE.CLICK, (event) => { closeMenus(); });
-
-        function closeMenus() {
-            sceneSettings.style.width = "0px";
-            entityExplorer.style.width = "0px";
-            main.style.marginLeft = "0px";
-            entitySideBarToggleOn.style.background = "black";
-            sceneSettingsToggleOn.style.background = "black"
+        const button = new Button();
+        button.title = "Add";
+        button.id = '1';
+        button.colour = PresetColours.Primary;
+        button.fontSize = PresetFontSize.Smaller;
+        button.action = (ev) => {
+            console.log(ev);
         }
+        buttons.push(button);
 
+        card.buttons = buttons;
+
+        for (var i = 0; i < 10; i++) {
+            let cardWrapper = builder.createInlineCard(card);
+            entities.appendChild(cardWrapper);
+        }
     </script>
 </body>
 

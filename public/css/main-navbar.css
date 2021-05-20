@@ -182,21 +182,27 @@ header {
 }
 
 .sidebar-content {
-    width: 100%;
-    padding-left: 20px;
+    width: 90%;
+    height: 90%;
+    padding-left: 15px;
+    padding-right: 15px;
+    position: absolute;
 }
 
 .sidebar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 1.5rem;
+    padding: 5px 5px;
+    margin-left: 0;
 }
 
-.bottombar-header {
+.sidebar-header-nopadding {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 5px 15px;
+    margin-left: 0;
 }
 
 .sidebar-close-btn {
@@ -225,8 +231,22 @@ header {
     left: 5px;
 }
 
+.btn {
+    font-size: 18px;
+    background: transparent;
+    border-color: transparent;
+    color: hsl(205, 78%, 60%);
+    transition: all 0.3s linear;
+    cursor: pointer;
+    color: rgb(44, 22, 22);
+    position: relative;
+    top: 0px;
+    left: 5px;
+}
+
 .sidebar-close-btn:hover,
-.sidebar-close-btn-right:hover {
+.sidebar-close-btn-right:hover,
+.btn:hover {
     color: rgb(212, 13, 13);
     transform: rotate(360deg);
 }

@@ -25,28 +25,54 @@ card.image =
 
 const games = await useAPI("/games");
 
-console.log(games)
+console.log(games);
+const elem = document.getElementById("searchResults");
 
-var buttons = new Array();
-for (var i = 0; i < 1; i++) {
+games.forEach((element) => {
+	const card = new Card();
+
 	const button = new Button();
-	button.title = "Button" + i.toString();
-	button.id = i.toString();
+	button.title = "Go to game >";
+	button.id = element.id;
 	button.colour = PresetColours.Primary;
 	button.fontSize = PresetFontSize.Smaller;
 	button.action = (ev) => {
+		window.location = `/create/workspace/${element.id}`
 		console.log(ev);
 	};
-	buttons.push(button);
-}
+	card.title = element.name;
+	card.header = element.createdAt;
+	card.footer = element?.user?.username;
+	card.bodyText = element.description;
+	card.center = true;
+	card.colour = PresetColours.Dark;
+	card.whiteText = true;
+	card.image = "";
+	card.buttons = [button];
 
-card.buttons = buttons;
-const elem = document.getElementById("searchResults");
+	elem.appendChild(builder.createGenericCard(card));
+});
 
-for (var i = 0; i < 10; i++) {
-	let cardWrapper = builder.createGenericCard(card);
-	elem.appendChild(cardWrapper);
-}
+// var buttons = new Array();
+// for (var i = 0; i < 1; i++) {
+// 	const button = new Button();
+// 	button.title = "Button" + i.toString();
+// 	button.id = i.toString();
+// 	button.colour = PresetColours.Primary;
+// 	button.fontSize = PresetFontSize.Smaller;
+// 	button.action = (ev) => {
+// 		console.log(ev);
+// 	};
+// 	buttons.push(button);
+// }
+
+// card.buttons = buttons;
+// const elem = document.getElementById("searchResults");
+
+// for (var i = 0; i < 10; i++) {
+// 	let cardWrapper = builder.createGenericCard(card);
+// 	elem.appendChild(cardWrapper);
+// }
 
 const ex = new Explore(
 	new Form("searchForm"),

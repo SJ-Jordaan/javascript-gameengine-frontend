@@ -65,24 +65,21 @@
                 </div>
                 <section class="sidebar-content">
                     <h2><span class="uppercase">Entities</span></h2>
-                    <form name="filterEntities" id="filterEntitiesForm">
+                    <section name="filterEntities" id="filterEntitiesForm">
                         <fieldset
                             class="nav-form-input-inline-container input-width-auto m-top-1 inline-fieldset display-flex-col">
                             <legend>Entity Type</legend>
                             <section class="width-100">
-                                <select class="nav-selector width-100" name="type" id="entityType"
+                                <select class="nav-selector width-100 m-right-3" name="type" id="entityType"
                                     form="filterEntitiesForm">
-                                    <option value="all">All</option>
-                                    <option value="character">Characters</option>
+                                    <option value="character" selected>Characters</option>
                                     <option value="surface">Surfaces</option>
                                     <option value="background">Background</option>
                                 </select>
                             </section>
-                            <button type="submit" class="btn float-right"><i class="fa fa-refresh"
-                                    aria-hidden="true"></i>
-                            </button>
+
                         </fieldset>
-                    </form>
+                    </section>
                     <form>
                         <fieldset
                             class="nav-form-input-container input-width-auto m-top-1 default-fieldset display-flex-col">
@@ -110,7 +107,8 @@
                             class="nav-form-input-inline-container input-width-auto m-top-1 inline-fieldset display-flex-col">
                             <legend>Scenes</legend>
                             <section class="width-100">
-                                <select class="nav-selector width-100" name="scenes" id="scenes" form="changeScene">
+                                <select class="nav-selector width-100" name="activeScene" id="activeScene"
+                                    form="changeSceneForm">
                                     <option value="scene1">Scene 1</option>
                                     <option value="scene2">Scene 2</option>
                                     <option value="scene3">Scene 3</option>
@@ -138,15 +136,15 @@
                                 <legend>Scene Size</legend>
                                 <section>
                                     <label for="sceneWidth">W</label>
-                                    <input type="number" id="sceneWidth" class="input-w-60">
+                                    <input type="number" id="sceneWidth" name="sceneWidth" class="input-w-60">
                                 </section>
                                 <section class="m-left-2 m-right-auto">
                                     <label for="sceneHeight">H</label>
-                                    <input type="number" id="sceneHeight" class="input-w-60">
+                                    <input type="number" id="sceneHeight" name="sceneHeight" class="input-w-60">
                                 </section>
                             </fieldset>
                             <section class="m-top-2">
-                                <button class="primary-btn">create</button>
+                                <button type="submit" class="primary-btn">create</button>
                             </section>
                     </form>
                 </section>

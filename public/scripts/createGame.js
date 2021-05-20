@@ -37,8 +37,16 @@ class CreateNew {
 		const header = new Headers();
 		header.append("Content-Type", "application/json");
 
-		const newGame = useAPI("/games", { ...body }, "POST");
-		console.log(newGame);
+		useAPI("/games", { ...body }, "POST")
+			.then((newGame) => {
+				console.log(newGame);
+				window.location = `/create/workspace/${newGame.id}`;
+			})
+			.catch((error) => console.error(error));
+
+		// if (newGame) window.location = `/create/workspace/${newGame.id}`;
+		// else alert("Failed to create new game!");
+
 		// this._requests
 		// 	.sendRequestXHR(
 		// 		this._apiURL,

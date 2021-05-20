@@ -42,7 +42,7 @@ games.forEach((element) => {
 	};
 	card.title = element.name;
 	card.header = element.createdAt;
-	card.footer = element.creator.username;
+	card.footer = element?.user?.username;
 	card.bodyText = element.description;
 	card.center = true;
 	card.colour = PresetColours.Dark;

@@ -1,172 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" href="/public/images/icons/favicon.ico" />
-		<link rel="stylesheet" type="text/css" href="/public/css/main.css" />
-		<link
-			rel="stylesheet"
-			type="text/css"
-			href="/public/css/main-navbar.css"
-		/>
-		<link
-			rel="stylesheet"
-			type="text/css"
-			href="/public/css/main-searchbar.css"
-		/>
-		<link
-			rel="stylesheet"
-			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-		/>
-		<title>LAME|Engine2D</title>
-	</head>
 
-	<body>
-		<header>
-			<nav class="navbar">
-				<img
-					class="nav-icon"
-					src="/public/images/icons/logo.svg"
-					alt="Lame Engine 2D Logo"
-				/>
-				<div class="nav-dropdown">
-					<button class="nav-dropdown-btn">
-						<i class="fa fa-bars"></i>
-					</button>
-					<div class="nav-dropdown-content">
-						<a href="/create/new-game"
-							><span class="uppercase">Create</span></a
-						>
-						<a href="/myprojects"
-							><span class="uppercase">My projects</span></a
-						>
-						<a href="/signin" style="color: red"
-							><span class="uppercase">Signin</span></a
-						>
-						<a style="color: red" onclick="logOut()"
-							><span class="uppercase">Signout</span></a
-						>
-					</div>
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="icon" href="/public/images/icons/favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="/public/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="/public/css/main-navbar.css" />
+	<link rel="stylesheet" type="text/css" href="/public/css/main-searchbar.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+	<title>LAME|Engine2D</title>
+</head>
+
+<body>
+	<header>
+		<nav class="navbar">
+			<img class="nav-icon" src="/public/images/icons/logo.svg" alt="Lame Engine 2D Logo" />
+			<div class="nav-dropdown">
+				<button class="nav-dropdown-btn">
+					<i class="fa fa-bars"></i>
+				</button>
+				<div class="nav-dropdown-content">
+					<a href="/create/new-game"><span class="uppercase">Create</span></a>
+					<a href="/myprojects"><span class="uppercase">My projects</span></a>
+					<a href="/signin" style="color: red"><span class="uppercase">Signin</span></a>
+					<a style="color: red" onclick="logOut()"><span class="uppercase">Signout</span></a>
 				</div>
-			</nav>
-		</header>
-		<main>
-			<nav class="nav-searchbar">
-				<form name="searchForm" id="searchForm" class="nav-form">
-					<fieldset class="nav-form-dropdown-container">
-						<label class="nav-form-label" for="searchBy"
-							><span class="uppercase">Search by</span></label
-						>
-						<select
-							class="nav-selector"
-							name="searchBy"
-							id="searchBy"
-							form="searchForm"
-						>
-							<option value="creatorName">Creator Name</option>
-							<option value="gameName">Game Name</option>
-							<option value="year">Year</option>
-							<option value="rating">Rating</option>
-						</select>
-					</fieldset>
-					<fieldset
-						class="nav-form-input-inline-container"
-						style="margin-left: 30px"
-					>
-						<label class="nav-form-label" for="search"
-							><span class="uppercase">Search</span></label
-						>
-						<input
-							class="nav-form-input-inline"
-							type="text"
-							id="searchFor"
-							name="searchFor"
-							placeholder="Search..."
-						/>
-					</fieldset>
-					<button
-						class="primary-btn"
-						type="submit"
-						id="searchSubmit"
-						form="searchForm"
-						name="searchSubmit"
-						style="margin-left: 20px"
-					>
-						<span class="uppercase">Search</span>
-					</button>
-				</form>
-				<hr />
-				<form
-					name="orderByForm"
-					id="orderByForm"
-					class="nav-form"
-					style="float: right; margin-right: 30px"
-				>
-					<fieldset
-						class="nav-form-dropdown-container"
-						style="width: 100%"
-					>
-						<label class="nav-form-label" for="orderBy"
-							><span class="uppercase">Order by</span></label
-						>
-						<select
-							class="nav-selector"
-							name="orderBy"
-							id="orderBy"
-							form="orderByForm"
-							style="max-width: 150px"
-						>
-							<option value="creator">Creator Name</option>
-							<option value="gameName">Game Name</option>
-							<option value="gameName">Rating</option>
-							<option value="year">Year</option>
-						</select>
-					</fieldset>
-					<fieldset
-						class="nav-form-dropdown-container"
-						style="width: 30px"
-					>
-						<select
-							class="nav-selector"
-							name="orderAs"
-							id="orderAs"
-							form="orderByForm"
-						>
-							<option value="creator">Dsc</option>
-							<option value="gameName">Asc</option>
-						</select>
-					</fieldset>
-					<button
-						class="primary-btn"
-						type="submit"
-						id="orderBySubmit"
-						form="orderByForm"
-						name="orderByApply"
-						style="margin-left: 10px"
-					>
-						<span class="uppercase">Apply</span>
-					</button>
-				</form>
-			</nav>
-			<article id="api-status"></article>
-			<section id="searchResults"></section>
-		</main>
-		<footer>
-			<!-- <article> -->
-			LAME|Engine2D copyright(c) 2021
-			<!-- </article> -->
-		</footer>
+			</div>
+		</nav>
+	</header>
+	<main>
+		<nav class="nav-searchbar">
+			<form name="searchForm" id="searchForm" class="nav-form">
+				<fieldset class="nav-form-dropdown-container">
+					<label class="nav-form-label" for="searchBy"><span class="uppercase">Search by</span></label>
+					<select class="nav-selector" name="searchBy" id="searchBy" form="searchForm">
+						<option value="creatorName">Creator Name</option>
+						<option value="gameName">Game Name</option>
+						<option value="year">Year</option>
+						<option value="rating">Rating</option>
+					</select>
+				</fieldset>
+				<fieldset class="nav-form-input-inline-container" style="margin-left: 30px">
+					<label class="nav-form-label" for="search"><span class="uppercase">Search</span></label>
+					<input class="nav-form-input-inline" type="text" id="searchFor" name="searchFor"
+						placeholder="Search..." />
+				</fieldset>
+				<button class="primary-btn" type="submit" id="searchSubmit" form="searchForm" name="searchSubmit"
+					style="margin-left: 20px">
+					<span class="uppercase">Search</span>
+				</button>
+			</form>
+			<hr />
+			<form name="orderByForm" id="orderByForm" class="nav-form" style="float: right; margin-right: 30px">
+				<fieldset class="nav-form-dropdown-container" style="width: 100%">
+					<label class="nav-form-label" for="orderBy"><span class="uppercase">Order by</span></label>
+					<select class="nav-selector" name="orderBy" id="orderBy" form="orderByForm"
+						style="max-width: 150px">
+						<option value="creator">Creator Name</option>
+						<option value="gameName">Game Name</option>
+						<option value="gameName">Rating</option>
+						<option value="year">Year</option>
+					</select>
+				</fieldset>
+				<fieldset class="nav-form-dropdown-container" style="width: 30px">
+					<select class="nav-selector" name="orderAs" id="orderAs" form="orderByForm">
+						<option value="creator">Dsc</option>
+						<option value="gameName">Asc</option>
+					</select>
+				</fieldset>
+				<button class="primary-btn" type="submit" id="orderBySubmit" form="orderByForm" name="orderByApply"
+					style="margin-left: 10px">
+					<span class="uppercase">Apply</span>
+				</button>
+			</form>
+		</nav>
+		<article id="api-status"></article>
+		<section id="searchResults"></section>
+	</main>
+	<footer>
+		<!-- <article> -->
+		LAME|Engine2D copyright(c) 2021
+		<!-- </article> -->
+	</footer>
 
-		<script type="module" src="/public/scripts/exploreProvider.js"></script>
-		<script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
-		<script src="/public/scripts/googleInitializer.js"></script>
-		<script>
-			function logOut() {
-				firebase.auth().signOut();
-				sessionStorage.clear();
-			}
-		</script>
-	</body>
+	<script type="module" src="/public/scripts/exploreProvider.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+	<script src="/public/scripts/googleInitializer.js"></script>
+	<script>
+		function logOut() {
+			firebase.auth().signOut();
+			sessionStorage.clear();
+		}
+	</script>
+</body>
+
 </html>

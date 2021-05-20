@@ -1,8 +1,13 @@
-import { AnimatableEntity } from "./animatableEntity";
+import {AnimatableEntity} from "./animatableEntity";
 import Game from "./game";
 import EventType from "/public/scripts/common/constants/eventType.js";
 import CardBuilder from "/public/scripts/view-components/cards/cardBuilder.js";
-import { Card, Button, PresetColours, PresetFontSize } from "/public/scripts/view-components/cards/card.js";
+import {Card, Button, PresetColours, PresetFontSize} from "/public/scripts/view-components/cards/card.js";
+import Requests from "/public/scripts/common/utility/http/requests.js";
+import ResponseType from "/public/scripts/common/constants/responseType.js";
+import RequestType from "/public/scripts/common/constants/requestType.js";
+import useAPI from "/public/scripts/common/useAPI.js";
+import Storage from "/public/scripts/common/utility/storage/storage.js";
 
 const EngineModes = {
     designing: "Designing",
@@ -25,14 +30,18 @@ export class CoreEngine {
         this._posForm = document.getElementById("positionForm");
         this._rotForm = document.getElementById("rotationForm");
         this._scaleForm = document.getElementById("scaleForm");
-        this._filtEntForm = document.getElementById("filterEntitiesForm");
 
         this._scenesList = document.getElementById("activeScene");
         this._changeSceneForm = document.getElementById("changeSceneForm");
         this._createSceneForm = document.getElementById("createSceneForm");
+
         this._entityType = document.getElementById("entityType");
+        this._entityName = document.getElementById("entityName");
 
         this.currentMode = EngineModes.designing;
+
+        this._iDBName = "LameEngine2d";
+        this._dbStoreKey = "GameState";
 
         //methods
         this.init = this.init.bind(this);
@@ -53,19 +62,7 @@ export class CoreEngine {
     }
 
     //Transformations Event Handlers
-    translateEntityHandler(ev){
-        ev.preventDefault();
-            const fData = new FormData(ev.target);
-            const formValues = {};
-
-            for (let keyval of fData.entries()) {
-                formValues[keyval[0]] = keyval[1];
-            }
-
-            this.games[this.currentGameIndex].getCurrentSelectedEntity().translateEntity(parseFloat(formValues.x), parseFloat(formValues.y));
-    }
-
-    rotateEntityHandler(ev){
+    translateEntityHandler(ev) {
         ev.preventDefault();
         const fData = new FormData(ev.target);
         const formValues = {};
@@ -74,12 +71,24 @@ export class CoreEngine {
             formValues[keyval[0]] = keyval[1];
         }
 
-        console.log(formValues);
+        this.games[this.currentGameIndex]
+            .getCurrentSelectedEntity()
+            .translateEntity(parseFloat(formValues.x), parseFloat(formValues.y));
+    }
+
+    rotateEntityHandler(ev) {
+        ev.preventDefault();
+        const fData = new FormData(ev.target);
+        const formValues = {};
+
+        for (let keyval of fData.entries()) {
+            formValues[keyval[0]] = keyval[1];
+        }
 
         this.games[this.currentGameIndex].getCurrentSelectedEntity().rotateEntity(parseFloat(formValues.degrees));
     }
 
-    scaleEntityHandler(ev){
+    scaleEntityHandler(ev) {
         ev.preventDefault();
         const fData = new FormData(ev.target);
         const formValues = {};
@@ -88,22 +97,25 @@ export class CoreEngine {
             formValues[keyval[0]] = keyval[1];
         }
 
-        this.games[this.currentGameIndex].getCurrentSelectedEntity().scaleEntity(parseFloat(formValues.x), parseFloat(formValues.y))
+        this.games[this.currentGameIndex]
+            .getCurrentSelectedEntity()
+            .scaleEntity(parseFloat(formValues.x), parseFloat(formValues.y));
     }
 
-    entityTransformedHandler(){
+    entityTransformedHandler() {
         const selectedEntity = this.games[this.currentGameIndex].getCurrentSelectedEntity();
-        if(selectedEntity){
+        if (selectedEntity) {
             // position
-         document.getElementById("xPosition").value = selectedEntity.transform.position.x.toFixed(2);
-         document.getElementById("yPosition").value = selectedEntity.transform.position.y.toFixed(2);
+            document.getElementById("xPosition").value = selectedEntity.transform.position.x.toFixed(2);
+            document.getElementById("yPosition").value = selectedEntity.transform.position.y.toFixed(2);
 
-         // Scale
-         document.getElementById("xScale").value = selectedEntity.transform.scale.x.toFixed(2);
-         document.getElementById("yScale").value = selectedEntity.transform.scale.y.toFixed(2);
+            // Scale
+            document.getElementById("xScale").value = selectedEntity.transform.scale.x.toFixed(2);
+            document.getElementById("yScale").value = selectedEntity.transform.scale.y.toFixed(2);
 
-         // Rotation
-         document.getElementById("rotationDeg").value = selectedEntity.transform.rotation.toFixed(2)
+            // Rotation
+            document.getElementById("rotationDeg").value = selectedEntity.transform.rotation.toFixed(2);
+            this._entityName.innerHTML = selectedEntity.name;
         }
     }
 
@@ -112,14 +124,14 @@ export class CoreEngine {
         return degrees * (pi / 180);
     }
 
-    setupEventListeners(){
+    setupEventListeners() {
         const playButton = document.querySelector("#play-button");
         playButton.addEventListener("click", this.playGame, false);
 
         const stopButton = document.querySelector("#stop-button");
         stopButton.addEventListener("click", this.stopGame, false);
 
-         this._entityContainerId = "entities";
+        this._entityContainerId = "entities";
         this._entities = document.getElementById(this._entityContainerId);
 
         this._positionForm = document.getElementById("positionForm");
@@ -132,29 +144,11 @@ export class CoreEngine {
         this._scaleForm.addEventListener(EventType.FORM.SUBMIT, this.scaleEntityHandler);
     }
 
-    filterEntities() {
-        const entities = document.getElementById("entities");
-
-        this._filtEntForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
-            ev.preventDefault();
-            const fData = new FormData(ev.target);
-            const values = {};
-
-            for (let keyval of fData.entries()) {
-                values[keyval[0]] = keyval[1];
-            }
-
-            // clear entities before populating
-            // entities.innerHTML = "";
-            console.log(`Filtering By: ${values.type}`);
-        });
-    }
-
     addScenes() {
         if (this._scenesList) {
             this._scenesList.innerHTML = "";
 
-            this.games[0].scenes.forEach((scene) => {
+            this.games[this.currentGameIndex].scenes.forEach((scene) => {
                 let option = document.createElement("option");
                 option.text = scene.name;
                 option.value = scene.name;
@@ -177,19 +171,15 @@ export class CoreEngine {
             if (formValues) {
                 const index = this.games[this.currentGameIndex].getSceneIndex(formValues.activeScene);
 
-                if (index && index > -1) {
-                    this.games[this.currentGameIndex].currentGameIndex = index;
-
-                    console.log(this.games[this.currentGameIndex].scenes);
+                console.log("INDEX: " + index.toString());
+                if (index > -1) {
+                    console.log(formValues);
+                    this.games[this.currentGameIndex].currentSceneIndex = index;
                     this.games[this.currentGameIndex].scenes.forEach((scene) => {
-                        const currIndex = this.games[this.currentGameIndex].scenes.findIndex((x) => {
-                            if (x.name === scene.name) return true;
-                        });
-
-                        if (currIndex !== index) {
+                        console.log(scene.name);
+                        if (this.games[this.currentGameIndex].getSceneIndex(scene.name) !== index) {
                             scene.visible = false;
                         } else {
-                            console.log(scene);
                             scene.visible = true;
                         }
                     });
@@ -210,25 +200,21 @@ export class CoreEngine {
 
             if (formValues) {
                 const hasErrors = false;
-                if (!formValues?.sceneGravity) {
-                    alert("Scene Creation Failed, no gravity selected!");
+                if (!formValues.sceneGravity) {
                     hasErrors = true;
-                } else if (!formValues?.sceneHeight && parseFloat(formValues?.sceneHeight) > 0) {
-                    alert("Scene Creation Failed, no height selected!");
+                } else if (!formValues.sceneHeight && parseFloat(formValues.sceneHeight) > 0) {
                     hasErrors = true;
-                } else if (!formValues?.sceneWidth && parseFloat(formValues?.sceneWidth) > 0) {
-                    alert("Scene Creation Failed, no width selected!");
+                } else if (!formValues.sceneWidth && parseFloat(formValues.sceneWidth) > 0) {
                     hasErrors = true;
-                } else if (!formValues?.sceneName) {
-                    alert("Scene Creation Failed, no name provided!");
-
+                } else if (!formValues.sceneName) {
                     if (this.games[this.currentGameIndex].getSceneIndex(formValues.sceneName) > -1) {
-                        alert("Scene Creation Failed, scene name already exists!");
+                        hasErrors = true;
                     }
                     hasErrors = true;
                 }
 
                 if (hasErrors) {
+                    alert("Failed to create a new Scene, inccorect parameters provided");
                     return undefined;
                 }
 
@@ -387,7 +373,6 @@ export class CoreEngine {
         });
 
         this.initializeEntitySettings();
-        this.filterEntities();
         this.initializeScenes();
         PIXI.Ticker.shared.add(this.render);
     }
@@ -417,7 +402,7 @@ export class CoreEngine {
     }
 
     bulkUploadTexturesToWorkspace(loader, resources) {
-        for(var property in resources){
+        for (var property in resources) {
             let resource = resources[property];
             let name = resource.name;
             let url = resource.url;
@@ -477,11 +462,73 @@ export class CoreEngine {
         this.games.push(game);
     }
 
-    deleteGame(gameName) { }
+    deleteGame(gameName) {}
 
-    saveGame() { 
+    initializeStateSettings() {
+        const synchronize = document.getElementById("synchronize");
+        const save = document.getElementById("save");
+
+        synchronize.addEventListener(EventType.MOUSE.CLICK, (ev) => {
+            ev.preventDefault();
+            this.synchronizeGame();
+        });
+
+        save.addEventListener(EventType.MOUSE.CLICK, (ev) => {
+            ev.preventDefault();
+            this.saveGame();
+        });
+    }
+
+    saveGame() {
+        const state = this.getGameState();
+
+        if (state) {
+            const iDB = new Storage(this._iDBName, this._dbStoreKey);
+
+            iDB.save(state)
+                .then((response) => {
+                    if (response) {
+                        confirm("Game Saved locally Successfully!");
+                    }
+                })
+                .catch((err) => {
+                    alert("Game Save failed!");
+                });
+        }
+    }
+
+    loadGameState() {
+        const iDB = new Storage(this._iDBName, this._dbStoreKey);
+
+        iDB.restore();
+
+        if (iDB.result) {
+            //Load Game Data
+        }
+    }
+
+    async getGameState() {
+        const response = await useAPI("/create");
+        if (response) {
+            //Load Game Data
+        }
+    }
+
+    async synchronizeGame() {
+        const state = this.getGameState();
+
+        if (state) {
+            const response = await useAPI("/create", state, RequestType.POST);
+
+            if (response) {
+                confirm("Game Synchronized with DB Successfully!");
+            }
+        }
+    }
+
+    getGameState() {
         const gameState = {};
-        this.games[this.currentGameIndex].scenes.forEach(scene => {
+        this.games[this.currentGameIndex].scenes.forEach((scene) => {
             const sceneProperties = {
                 name: scene.name,
                 height: scene.height,
@@ -493,7 +540,7 @@ export class CoreEngine {
             let entityProperties;
             gameState[scene.name] = sceneProperties;
 
-            scene.children.forEach(child => {
+            scene.children.forEach((child) => {
                 let scale = {x: child.scale._x, y: child.scale._y};
                 entityProperties = {
                     name: child.name,
@@ -507,22 +554,24 @@ export class CoreEngine {
                     rotation: child.angle,
                 };
                 gameState[scene.name].children.push(entityProperties);
-                console.log(child.transform);
             });
         });
 
+        return gameState;
         //Send save request from here JSON.stringify(gameState)
     }
 
     createGameEntity(texture = PIXI.utils.TextureCache["blueTile"]) {
-        const index = this.games[this.currentGameIndex].scenes[0].children.length;
-        console.log(this._entityType);
-        console.log(this._entityType.value);
+        const currentScene = this.games[this.currentGameIndex].getCurrentScene();
+        const currentSceneIndex = this.games[this.currentGameIndex].getSceneIndex(currentScene.name);
+        const index = this.games[this.currentGameIndex].scenes[currentSceneIndex].children.length;
+
         const gameEntity = new AnimatableEntity(texture, "untitled" + index);
         gameEntity.x = this.renderer.screen.width / 2;
         gameEntity.y = this.renderer.screen.height / 2;
-        this.games[this.currentGameIndex].getCurrentScene().setSelectedEntityName(gameEntity.name);
-        this.games[this.currentGameIndex].scenes[0].addChild(gameEntity);
+
+        currentScene.setSelectedEntityName(gameEntity.name);
+        this.games[this.currentGameIndex].scenes[currentSceneIndex].addChild(gameEntity);
     }
 
     playGame() {

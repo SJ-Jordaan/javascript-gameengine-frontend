@@ -42,6 +42,25 @@
     border-radius: 4px;
     letter-spacing: 2px;
 }
+
+.dynamic-card-button-sm {
+    border: none;
+    color: white;
+    padding: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    font-family: inherit;
+    border-radius: 4px;
+    height: 20px;
+    margin: 0;
+    vertical-align: middle;
+    letter-spacing: 2px;
+}
+
 /* .dynamic-card-header {
 } */
 
@@ -61,4 +80,29 @@
 
 .dynamic-card-container {
     padding: 2px 16px;
+}
+
+.dynamic-inline-card {
+    display: flex;
+    flex-direction: row;
+    /* width: 100%; */
+    border-radius: 2px;
+    padding: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 40px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.dynamic-inline-card-content {
+    display: flex;
+    flex-direction: row;
+    margin-left: 20px;
+    height: 100%;
+    width: 100%;
+}
+
+.dynamic-inline-card img {
+    width: 32px;
 }

@@ -17,7 +17,7 @@ createRouter.post("/create/new-game", (req, res) => {
     res.sendStatus(200);
 });
 
-createRouter.get("/create/workspace", (req, res) => {
+createRouter.get("/create/workspace/:id", (req, res) => {
     res.sendFile(path.join(__dirname, "../", "web", "view", "workspace.html"));
 });
 

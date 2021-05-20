@@ -1,5 +1,5 @@
 export default async function useAPI(url, body, method = "GET", params) {
-	const accessToken = JSON.parse(sessionStorage.getItem("user")).accessToken;
+	const accessToken = JSON.parse(sessionStorage.getItem("user"))?.accessToken;
 	console.log(accessToken);
 	try {
 		const response = await fetch(
@@ -8,7 +8,7 @@ export default async function useAPI(url, body, method = "GET", params) {
 				method,
 				body: body
 					? JSON.stringify({
-							body,
+							...body,
 					  })
 					: null,
 				headers: {

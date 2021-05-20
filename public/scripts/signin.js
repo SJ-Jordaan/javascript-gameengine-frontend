@@ -6,7 +6,6 @@ firebase.auth().onAuthStateChanged(function (user) {
 		if (user != null) {
 			const email_id = user.uid;
 			console.log(`assigned in is: ${email_id}`);
-			window.location = "/explore";
 		}
 	} else {
 		const toast = document.getElementById("snackbar");
@@ -35,6 +34,7 @@ function logIn() {
 			.signInWithEmailAndPassword(userEmail, userPassword)
 			.then((userCredential) => {
 				// Signed in
+
 				fetch("https://game-engine-api.herokuapp.com/api/auth/signin", {
 					method: "POST",
 					body: JSON.stringify({
@@ -46,7 +46,10 @@ function logIn() {
 				})
 					.then((resp) => resp.json())
 					.then((result) => {
+						console.log(result);
 						sessionStorage.setItem("user", JSON.stringify(result));
+						window.location = "/explore";
+
 					})
 					.catch((error) => {
 						console.error(error);

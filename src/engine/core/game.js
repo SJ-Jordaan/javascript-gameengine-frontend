@@ -27,8 +27,8 @@ export default class Game {
     }
 
     //Initializes a game with a single blank scene
-    init(width, height) {
-        let gameScene = new GameScene("gameScene", width, height);
+    init(width, height, sceneName) {
+        let gameScene = new GameScene(sceneName, width, height);
         gameScene.mode = this.mode;
         gameScene.visible = true;
         this.scenes.push(gameScene);
@@ -38,6 +38,29 @@ export default class Game {
         if (typeof index === "number" && index < this.scenes.length) {
             return this.scenes[index];
         }
+        return undefined;
+    }
+
+    setCurrentSceneIndex(index) {
+        if (typeof index === "number" && index < this.scenes.length) {
+            console.log(this.currentSceneIndex);
+            this.currentSceneIndex = index;
+            console.log(this.currentSceneIndex);
+        }
+    }
+
+    getSceneIndex(sceneName) {
+        const sceneIndex = this.scenes.findIndex((s) => {
+            console.log(`${s.name} vs ${sceneName}`);
+            if (s.name === sceneName) {
+                return true;
+            }
+        });
+
+        if (sceneIndex > -1) {
+            return sceneIndex;
+        }
+
         return undefined;
     }
 

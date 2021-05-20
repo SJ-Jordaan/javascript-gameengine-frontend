@@ -1,35 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="/public/css/signup.css" />
-		<link rel="stylesheet" href="/public/css/signin.css" />
-		<title>Sign up</title>
-	</head>
-	<body>
-		<form class="game" method="POST" id="signUpForm">
-			<h1>Sign up</h1>
-			<input type="text" name="" placeholder="Enter Name" id="name" />
-			<input type="text" name="" placeholder="Enter Email" id="email" />
-			<input
-				type="password"
-				name=""
-				placeholder="Enter Password"
-				id="password1"
-			/>
-			<input
-				type="password"
-				name=""
-				placeholder="Confirm Password"
-				id="password2"
-			/>
-			<input type="submit" value="Sign up" onclick="signUp()" />
-		</form>
-		<div id="snackbar">Error</div>
-		<script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
-		<script src="/public/scripts/googleInitializer.js"></script>
-		<script src="/public/scripts/signup.js"></script>
-	</body>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="/public/css/signup.css" />
+	<link rel="stylesheet" href="/public/css/signin.css" />
+	<link rel="stylesheet" type="text/css" href="/public/css/loader.css" />
+	<title>Sign up</title>
+	<script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+</head>
+
+<body>
+	<form class="game" method="POST" id="signUpForm">
+		<h1>Sign up</h1>
+		<input type="text" name="" placeholder="Enter Name" id="name" />
+		<input type="text" name="" placeholder="Enter Email" id="email" />
+		<input type="password" name="" placeholder="Enter Password" id="password1" />
+		<input type="password" name="" placeholder="Confirm Password" id="password2" />
+		<input type="submit" value="Sign up" />
+	</form>
+	<div id="snackbar">Error</div>
+	<script type="module" src="/public/scripts/googleInitializer.js"></script>
+	<script type="module">
+		import signUp from "/public/scripts/signup.js";
+
+		document.getElementById("signUpForm").onsubmit = (ev) => {
+			ev.preventDefault();
+			signUp();
+		};
+
+	</script>
+</body>
+
 </html>

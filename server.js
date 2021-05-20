@@ -4,8 +4,12 @@ const path = require("path");
 const homeRouter = require("./routes/homeRouter");
 const engineRouter = require("./routes/engineRouter");
 const exploreRouter = require("./routes/exploreRouter");
+const authRouter = require("./routes/authRouter");
 const createRouter = require("./routes/createRouter");
-const {Requests, RequestMethod} = require("./src/common/utility/requests/requests");
+const {
+	Requests,
+	RequestMethod,
+} = require("./src/common/utility/requests/requests");
 const Param = require("./src/common/utility/requests/param");
 const welcomeRouter = require("./routes/welcomeRouter");
 
@@ -16,6 +20,7 @@ app.use(engineRouter);
 app.use(exploreRouter);
 app.use(createRouter);
 app.use(welcomeRouter);
+app.use(authRouter);
 
 // Serve Static Assets
 

@@ -1,14 +1,14 @@
 "use strict";
 
-import {AnimatableEntity} from "./animatableEntity";
-import {BaseEntity} from "./baseEntity";
+import { AnimatableEntity } from "./animatableEntity";
+import { BaseEntity } from "./baseEntity";
 import Game from "./game";
 import EventType from "/public/scripts/common/constants/eventType.js";
 import workspaceNavigation from "/public/scripts/workspaceNav.js";
 import CardBuilder from "/public/scripts/view-components/cards/cardBuilder.js";
-import {Card, Button, PresetColours, PresetFontSize} from "/public/scripts/view-components/cards/card.js";
+import { Card, Button, PresetColours, PresetFontSize } from "/public/scripts/view-components/cards/card.js";
 import Form from "/public/scripts/common/utility/forms/form.js";
-import {EventTypeAndHandler} from "/public/scripts/common/utility/events/events.js";
+import { EventTypeAndHandler } from "/public/scripts/common/utility/events/events.js";
 
 const EngineModes = {
     designing: "Designing",
@@ -32,7 +32,7 @@ export class CoreEngine {
 
         this._posForm.onsubmit = (ev) => {
             const values = Array.from(document.querySelectorAll("#positionForm input")).reduce(
-                (acc, input) => ({...acc, [input.id]: input.value}),
+                (acc, input) => ({ ...acc, [input.id]: input.value }),
                 {}
             );
         };
@@ -42,40 +42,14 @@ export class CoreEngine {
         //methods
         this.init = this.init.bind(this);
         this.loadTexturesFromLocal = this.loadTexturesFromLocal.bind(this);
+        this.loadTextureToWorkspace = this.loadTextureToWorkspace.bind(this);
+        this.bulkUploadTexturesToWorkspace = this.bulkUploadTexturesToWorkspace.bind(this);
         this.createGame = this.createGame.bind(this);
         this.loadDefaultAssets = this.loadDefaultAssets.bind(this);
         this.createGameEntity = this.createGameEntity.bind(this);
-        this.addTestObjects = this.addTestObjects.bind(this);
         this.render = this.render.bind(this);
         this.playGame = this.playGame.bind(this);
         this.stopGame = this.stopGame.bind(this);
-    }
-
-    addTestObjects() {
-        const surface_1 = new BaseEntity(PIXI.utils.TextureCache["redTile"], "red");
-        surface_1.x = 20;
-        surface_1.y = 20;
-        this.games[this.currentGameIndex].scenes[0].addChild(surface_1);
-
-        const surface_2 = new BaseEntity(PIXI.utils.TextureCache["blackTile"], "black");
-        surface_2.x = 20;
-        surface_2.y = 20;
-        this.games[this.currentGameIndex].scenes[0].addChild(surface_2);
-
-        const surface_3 = new BaseEntity(PIXI.utils.TextureCache["yellowTile"], "yellow");
-        surface_3.x = 20;
-        surface_3.y = 20;
-        this.games[this.currentGameIndex].scenes[0].addChild(surface_3);
-
-        const surface_4 = new BaseEntity(PIXI.utils.TextureCache["brownTile"], "brown");
-        surface_4.x = 20;
-        surface_4.y = 20;
-        this.games[this.currentGameIndex].scenes[0].addChild(surface_4);
-
-        const surface_5 = new BaseEntity(PIXI.utils.TextureCache["greenTile"], "green");
-        surface_5.x = 20;
-        surface_5.y = 20;
-        this.games[this.currentGameIndex].scenes[0].addChild(surface_5);
     }
 
     init() {
@@ -83,18 +57,13 @@ export class CoreEngine {
             antalias: true,
             autoDensity: true,
             resolution: window.devicePixelRatio || 1,
-            width: 900,
-            height: 600,
+            width: 1000,
+            height: 700,
         });
         this.renderer = renderer;
 
         const engineView = document.getElementById("engine-view");
         engineView.appendChild(renderer.view);
-        const uploadBtn = document.querySelector("#upload-button");
-        uploadBtn.addEventListener("change", this.loadTexturesFromLocal, false);
-
-        const createBtn = document.querySelector("#create-sprite-button");
-        createBtn.addEventListener("click", this.createGameEntity, false);
 
         const playBtn = document.querySelector("#play-button");
         playBtn.addEventListener("click", this.playGame, false);
@@ -111,8 +80,6 @@ export class CoreEngine {
         this.games[this.currentGameIndex].scenes.forEach((scene) => {
             this.stage.addChild(scene);
         });
-
-        // this.loadEntitiesToWorkspace();
 
         PIXI.Ticker.shared.add(this.render);
     }
@@ -137,19 +104,25 @@ export class CoreEngine {
             .add("orangeTile", "images/orangeTile.png")
             .add("background", "images/background.jpg");
 
-        this.loadEntityToWorkspace("blueTile", "images/blueTile.png");
-
-        this.loader.onComplete.add(this.addTestObjects);
+        this.loader.onComplete.add(this.bulkUploadTexturesToWorkspace);
         this.loader.load();
     }
 
-    loadEntityToWorkspace(name, path) {
-        const assetPath = "/public/assets/" + path;
+    bulkUploadTexturesToWorkspace(loader, resources) {
+        for(var property in resources){
+            let resource = resources[property];
+            let name = resource.name;
+            let url = resource.url;
+            this.loadTextureToWorkspace(name, url);
+        }
+    }
+
+    loadTextureToWorkspace(name, path) {
         const builder = new CardBuilder();
 
         const card = new Card();
         card.title = name;
-        card.image = assetPath;
+        card.image = path;
         card.colour = PresetColours.Light;
 
         var buttons = new Array();
@@ -198,9 +171,9 @@ export class CoreEngine {
         this.games.push(game);
     }
 
-    deleteGame(gameName) {}
+    deleteGame(gameName) { }
 
-    saveGame() {}
+    saveGame() { }
 
     createGameEntity(texture = PIXI.utils.TextureCache["blueTile"]) {
         //Creates an entity at the center of the current game scene with the default

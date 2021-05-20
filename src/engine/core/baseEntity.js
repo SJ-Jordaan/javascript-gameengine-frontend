@@ -53,7 +53,7 @@ export class BaseEntity extends PIXI.Sprite {
             });
 
             siblings.forEach((sibling) => {
-                if (sibling.type === EntityType.surface) {
+                if (sibling.type !== EntityType.background) {
                     if (
                         Math.abs(this.getBounds().top - sibling.getBounds().bottom) < snapDistance &&
                         this.x <= sibling.getBounds().right &&
@@ -95,7 +95,7 @@ export class BaseEntity extends PIXI.Sprite {
             });
 
             siblings.forEach((sibling) => {
-                if (sibling.type !== EntityType.surface) {
+                if (sibling.type !== EntityType.background) {
                     if (this.vertexPoints.topLeft.distanceTo(sibling.vertexPoints.bottomRight) <= snapDistance) {
                         this.x = sibling.x + sibling.getBounds().width;
                         this.y = sibling.y + sibling.getBounds().height;

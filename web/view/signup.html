@@ -6,6 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="/public/css/signup.css" />
 		<link rel="stylesheet" href="/public/css/signin.css" />
+		<link rel="stylesheet" href="/public/css/loader.css" />
 		<title>Sign up</title>
 	</head>
 	<body>
@@ -28,6 +29,9 @@
 			<input type="submit" value="Sign up" onclick="signUp()" />
 		</form>
 		<div id="snackbar">Error</div>
+		<div id="overlay">
+			<div class="loader"></div>
+		</div>
 		<script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
 		<script src="/public/scripts/googleInitializer.js"></script>
 		<script src="/public/scripts/signup.js"></script>

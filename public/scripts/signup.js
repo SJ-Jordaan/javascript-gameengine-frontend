@@ -1,6 +1,7 @@
 let message = [];
 
 function signUp() {
+	
 	document
 		.getElementById("signUpForm")
 		.addEventListener("submit", function (event) {
@@ -13,10 +14,12 @@ function signUp() {
 	const password2 = document.getElementById("password2").value;
 
 	if (validateFields(name, email, password1, password2)) {
+		document.getElementById("overlay").style.display = "block"
 		firebase
 			.auth()
 			.createUserWithEmailAndPassword(email, password1)
 			.then(async (userCredential) => {
+				document.getElementById("overlay").style.display = "none"
 				// Signed in
 				var user = userCredential.user;
 				const toast = document.getElementById("snackbar");
@@ -24,7 +27,6 @@ function signUp() {
 				toast.innerHTML = `successfully create user: ${userCredential.email}`;
 
 				//TODO: Send to BACKEND
-				console.log(userCredential.uid);
 				console.log({
 					username: name,
 					uid: userCredential.uid,
@@ -42,19 +44,17 @@ function signUp() {
 					// Call login
 					window.location = '/signin'
 					console.log(data);
+					firebase.auth().signOut();
 				}).catch((error)=>{
-
+					const toast = document.getElementById("snackbar");
+					toast.className = "show";
+					toast.innerHTML = `Error: ${error}`;
 				});
-
-				console.log(userCredential);
-				await setTimeout(() => {
-					toast;
-					toast.className = toast.className.replace("show", "");
-					// window.location = '/index.html'
-				}, 4000);
-				//firebase.auth().signOut();
+				
 			})
 			.catch((error) => {
+				document.getElementById("overlay").style.display = "none"
+				
 				var errorCode = error.code;
 				var errorMessage = error.message;
 				console.log(errorMessage);

@@ -1,11 +1,20 @@
-import { BaseEntity } from "./baseEntity";
 import Point from "./point";
-export class AnimatableEntity extends BaseEntity {
-    constructor(texture, x = 0, y = 0) {
+
+const EntityType = {
+    character: "Character",
+    surface: "surface", 
+    background: "background",
+};
+
+Object.freeze(EntityType);
+
+export class BaseEntity extends PIXI.Sprite {
+    constructor(texture, name) {
         super(texture);
-        this.setTransform(x, y);
-        this.anchor.set(0.5);
-        this.on('pointermove', this.onDragMove);
+        this.name = name.toLowerCase(); //Unique identifier for this entity
+        this.interactive = true;
+        this.buttonMode = true;
+        this.type = EntityType.surface;
         this.vertexPoints = {
             topLeft: new Point(this.x, this.y),
             topRight: new Point(this.x + this.getBounds().width, this.y),
@@ -13,11 +22,19 @@ export class AnimatableEntity extends BaseEntity {
             bottomRight: new Point(this.x + this.getBounds().width, this.y + this.getBounds().height)
         };
 
-        //Methods
+        
+        this.on('pointerdown', this.onDragStart)
+            .on('pointerup', this.onDragEnd)
+            .on('pointerupoutside', this.onDragEnd)
+            .on('pointermove', this.onDragMove);
+
+        this.onDragStart = this.onDragStart.bind(this);
+        this.onDragEnd = this.onDragEnd.bind(this);
+        this.onDragMove = this.onDragMove.bind(this);
         this.updateVertexPoints = this.updateVertexPoints.bind(this);
         this.snapToEdge = this.snapToEdge.bind(this);
         this.snapToVertex = this.snapToVertex.bind(this);
-        this.onDragMove = this.onDragMove.bind(this);
+        this.getSiblings = this.getSiblings.bind(this);
     }
 
     updateVertexPoints() {
@@ -36,7 +53,7 @@ export class AnimatableEntity extends BaseEntity {
             });
 
             siblings.forEach(sibling => {
-                if (sibling instanceof AnimatableEntity) {
+                if (sibling.type === EntityType.surface) {
                     if (Math.abs(this.getBounds().top - sibling.getBounds().bottom) < snapDistance &&
                         this.x <= sibling.getBounds().right && this.x >= sibling.getBounds().left) {
                         this.x = sibling.x;
@@ -69,7 +86,7 @@ export class AnimatableEntity extends BaseEntity {
             });
 
             siblings.forEach(sibling => {
-                if(sibling instanceof AnimatableEntity){
+                if(sibling.type !== EntityType.surface){
                     if (this.vertexPoints.topLeft.distanceTo(sibling.vertexPoints.bottomRight) <= snapDistance) {
                         this.x = sibling.x + sibling.getBounds().width;
                         this.y = sibling.y + sibling.getBounds().height;
@@ -91,7 +108,48 @@ export class AnimatableEntity extends BaseEntity {
         }
     }
 
-    //Pointer Events
+    setEntityType(entityType){
+        this.type = EntityType[entityType];
+    }
+
+    getSiblings(){
+        let siblings = this.parent.children.filter(element => {
+            return element.name !== this.name;
+        });
+
+        return siblings;
+    }
+
+    transformX(transformOffset){
+        this.x += transformOffset;
+        this.updateVertexPoints();
+    }
+
+    transformY(transformOffset){
+        this.y += transformOffset;
+        this.updateVertexPoints();
+    }
+
+    transform(transformOffsetX, transformOffsetY){
+        this.transformX(transformOffsetX);
+        this.transformY(transformOffsetY);
+    }
+
+    onDragStart(event) {
+        this.data = event.data;
+        this.alpha = 0.5;
+        this.dragging = true;
+
+        this.offX = this.x - this.data.getLocalPosition(this.parent).x;
+        this.offY = this.y - this.data.getLocalPosition(this.parent).y;
+    }
+
+    onDragEnd() {
+        this.alpha = 1;
+        this.dragging = false;
+        this.data = null;
+    }
+
     onDragMove() {
         if (this.dragging) {
             const newPosition = this.data.getLocalPosition(this.parent);

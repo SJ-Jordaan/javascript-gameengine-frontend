@@ -20,11 +20,11 @@ export class GameScene extends PIXI.Container {
         this.edgeSnap = false;
     }
 
-    enableVertexSnap(){
+    enableVertexSnap() {
         this.vertexSnap = true;
     }
 
-    disableVertexSnap(){
+    disableVertexSnap() {
         this.vertexSnap = false;
     }
 };

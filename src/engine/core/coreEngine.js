@@ -1,3 +1,7 @@
+'use strict';
+
+import { AnimatableEntity } from "./animatableEntity";
+import { BaseEntity } from "./baseEntity";
 import Game from "./game";
 
 const EngineModes = {
@@ -8,14 +12,10 @@ const EngineModes = {
 
 Object.freeze(EngineModes);
 export class CoreEngine {
-    constructor(width = 900, height = 600) {
+    constructor() {
         //Instance variables
-        this.app = new PIXI.Application({
-            width: width,
-            height: height,
-            backgroundColor: 0xaaaaaa,
-            resolution: window.devicePixelRatio || 1, autoResize: true
-        });
+        this.loader = new PIXI.Loader();
+        this.stage = new PIXI.Container();
         this.currentGameIndex = 0;
         this.games = [];
         this.currentMode = EngineModes.designing;
@@ -23,31 +23,53 @@ export class CoreEngine {
         //methods
         this.init = this.init.bind(this);
         this.loadTexturesFromLocal = this.loadTexturesFromLocal.bind(this);
-        this.renderGame = this.renderGame.bind(this);
         this.createGame = this.createGame.bind(this);
         this.loadDefaultAssets = this.loadDefaultAssets.bind(this);
+        this.createGameEntity = this.createGameEntity.bind(this);
+        this.createBackground = this.createBackground.bind(this);
+        this.render = this.render.bind(this);
     }
 
     init() {
+        const renderer = PIXI.autoDetectRenderer({
+            antalias: true,
+            autoDensity: true,
+            resolution: window.devicePixelRatio || 1,
+            width: 900,
+            height: 600,
+        });
+        this.renderer = renderer;
+
         const engineView = document.getElementById("engine-view");
-        engineView.appendChild(this.app.view);
+        engineView.appendChild(renderer.view);
 
         const uploadBtn = document.querySelector('#upload-button');
         uploadBtn.addEventListener('change', this.loadTexturesFromLocal, false);
 
+        const createBtn = document.querySelector("#create-sprite-button");
+        createBtn.addEventListener('click', this.createGameEntity, false);
+
         //Pre-load default assets here (Assets that come with the engine)
-        this.app.loader.baseUrl = "/public/assets/";
+        this.loader.baseUrl = "/public/assets/";
 
         this.loadDefaultAssets();
         this.createGame("Test Game");
 
         this.games[this.currentGameIndex].scenes.forEach(scene => {
-            this.app.stage.addChild(scene);
+            this.stage.addChild(scene);
         });
+
+        PIXI.Ticker.shared.add(this.render);
+    }
+
+    render(){
+        this.renderer.clear();
+        this.games[this.currentGameIndex].play();
+        this.renderer.render(this.stage);
     }
 
     loadDefaultAssets() {
-        this.app.loader
+        this.loader
             .add("blueTile", "images/blueTile.png")
             .add("brownTile", "images/brownTile.png")
             .add("blackTile", "images/blackTile.png")
@@ -56,10 +78,10 @@ export class CoreEngine {
             .add("redTile", "images/redTile.png")
             .add("whiteTile", "images/whiteTile.png")
             .add("orangeTile", "images/orangeTile.png")
-            .add("background", "images/background.jpg");
-        
-        this.app.loader.onComplete.add(this.renderGame);
-        this.app.loader.load();
+            // .add("background", "images/background.jpg");
+
+        // this.loader.onComplete.add();
+        this.loader.load();
     }
 
     //Event handler for reading images from the local machine and uploading them
@@ -70,7 +92,7 @@ export class CoreEngine {
 
         for (let i = 0; i < selectedFiles.length; i++) {
             let reader = new FileReader();
-            reader.onload = function () {
+            reader.onload = () => {
                 const img = new Image();
                 img.src = reader.result;
                 let texture = new PIXI.BaseTexture(img.src);
@@ -80,10 +102,6 @@ export class CoreEngine {
         }
     }
 
-    renderGame() {
-        this.games[this.currentGameIndex].render();
-    }
-
     createGame(gameName) {
         let game = new Game(gameName);
         game.init();
@@ -91,17 +109,29 @@ export class CoreEngine {
     }
 
     deleteGame(gameName) {
-        //TODO: This method deletes a game with name gameName from the list of games
-        //TODO: This should make a backend call to have the data associated with the
-        //game deleted from the DB as well
     }
 
     saveGame() {
-        //TODO: Saves the current state of the game in the database.
-        //TODO: Figure out the best way to save game data
     }
 
-    play(){
-        this.currentMode = EngineModes.playing;
+    createGameEntity() {
+        //Creates an entity at the center of the current game scene with the default
+        //texture and default title
+        const index = this.games[this.currentGameIndex].scenes[0].children.length;
+
+        const gameEntity = new AnimatableEntity(PIXI.utils.TextureCache["blueTile"], "untitled" + index);
+        gameEntity.x = this.renderer.screen.width / 2;
+        gameEntity.y = this.renderer.screen.height / 2;
+        this.games[this.currentGameIndex].scenes[0].addChild(gameEntity);
+    }
+
+    createBackground(texture = PIXI.utils.TextureCache["background"]){
+        const backgrounds = this.games[this.currentGameIndex].scenes[0].children.filter(element => {
+            return element.name.toLowerCase() === "background";
+        });
+
+        const index = backgrounds.length;
+        const background = new BaseEntity(texture, "background" + index);
+        this.games[this.currentGameIndex].scenes[this.games[this.currentGameIndex].currentSceneIndex].addChild(background);
     }
 };

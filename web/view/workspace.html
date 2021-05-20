@@ -75,20 +75,17 @@
                             </button>
                         </fieldset>
                     </form>
-                    <button id="" class="primary-btn-sm primary-btn-outline width-100 m-top-1">Create New
-                        Entity</button>
+                    <form>
+                        <fieldset
+                            class="nav-form-input-container input-width-auto m-top-1 default-fieldset display-flex-col">
+                            <legend>Add Entity</legend>
+                            <input type="file" id="upload-button" accept="image/*" multiple />
+                            <button id="create-sprite-button"
+                                class="primary-btn-sm primary-btn-outline width-100 m-top-1">Create New
+                                Entity</button>
+                        </fieldset>
+                    </form>
                     <section id="entities" class="m-top-1 display-flex-col">
-                        <!-- <section class="display-flex-row w-100 card-temp" style="align-items: center; ">
-                            <img src="/public/images/tile.png" width="32px">
-                            <div class="display-flex-row m-left-3 height-100 width-100" style="align-items:center">
-                                <a>Entity</a>
-                                <button class="primary-btn-sm m-left-auto">Add</button>
-                                <button class="primary-btn-sm m-left-auto">Add</button>
-                                <button class="primary-btn-sm m-left-auto">Add</button>
-                            </div>
-                        </section> -->
-                        <!-- Content is generated dynamically -->
-
                     </section>
                 </section>
             </aside>
@@ -168,14 +165,14 @@
                                         <legend>Position</legend>
                                         <section>
                                             <label for="xPosition">X</label>
-                                            <input type="text" id="xPosition" class="single-input" value="021">
+                                            <input type="number" name="x" id="xPosition" class="input-w-50" value="000">
                                         </section>
                                         <section class="m-left-2 m-right-auto">
                                             <label for="yPosition">Y</label>
-                                            <input type="text" id="yPosition" class="single-input" value="001">
+                                            <input type="number" name="y" id="yPosition" class="input-w-50" value="000">
                                         </section>
-                                        <button type="submit" class="btn float-right"><i class="fa fa-refresh"
-                                                aria-hidden="true"></i>
+                                        <button type="submit" class="btn float-right" name="submit"><i
+                                                class="fa fa-refresh" aria-hidden="true"></i>
                                         </button>
                                     </fieldset>
                                 </form>
@@ -184,27 +181,27 @@
                                         <legend>Rotation</legend>
                                         <section>
                                             <label for="rotationDeg">Degrees</label>
-                                            <input type="number" id="rotationDeg" class="single-input ">
+                                            <input type="number" name="degrees" id="rotationDeg" class="input-w-50">
                                         </section>
 
-                                        <button type="submit" class="btn float-right"><i class="fa fa-refresh"
-                                                aria-hidden="true"></i>
+                                        <button type="submit" class="btn float-right m-left-auto"><i
+                                                class="fa fa-refresh" aria-hidden="true"></i>
                                         </button>
                                     </fieldset>
                                 </form>
-                                <form name="scaleForm">
+                                <form name="scaleForm" id="scaleForm">
                                     <fieldset id="scaleField" class="inline-fieldset">
                                         <legend>Scale</legend>
                                         <section>
                                             <label for="xScale">X</label>
-                                            <input type="text" id="xScale" class="single-input ">
+                                            <input type="number" id="xScale" name="x" class="input-w-50">
                                         </section>
                                         <section class="m-left-2 m-right-auto">
                                             <label for="yScale">Y</label>
-                                            <input type="text" id="yScale" class="single-input ">
+                                            <input type="number" id="yScale" name="y" class="input-w-50">
                                         </section>
-                                        <button type="submit" class="btn float-right"><i class="fa fa-refresh"
-                                                aria-hidden="true"></i>
+                                        <button type="submit" class="btn float-right m-left-auto"><i
+                                                class="fa fa-refresh" aria-hidden="true"></i>
                                         </button>
                                     </fieldset>
                                 </form>
@@ -265,10 +262,10 @@
                 </aside>
                 <section id="engine-view" class="workspace width-100 height-100">
                     <!-- <canvas width="500" height="350"></canvas> -->
-                    <input type="file" id="upload-button" accept="image/*" multiple />
-                    <button type="button" id="create-sprite-button">Create Entity</button>
+
+                    <!-- 
                     <button type="button" id="play-button">Play</button>
-                    <button type="button" id="stop-button">Stop</button>
+                    <button type="button" id="stop-button">Stop</button> -->
                 </section>
             </section>
         </section>
@@ -309,15 +306,7 @@
         //     entities.appendChild(cardWrapper);
         // }
 
-        const posForm = document.getElementById("positionForm");
-
-        // window.addEventListener(EventType.FORM.SUBMIT, this._posForm);
-        posForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
-            ev.preventDefault();
-            console.log(values);
-        });
-
-        // _posForm.onsubmit = (ev) => {
+            // _posForm.onsubmit = (ev) => {
         //     ev.preventDefault();
         //     const fData = new FormData(_posForm);
         //     const formValues = {};

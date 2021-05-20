@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/public/images/icons/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/public/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/public/css/main-navbar.css">
+    <link rel="stylesheet" type="text/css" href="/public/css/main-searchbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>LAME|Engine2D</title>
+</head>
+
+<body style="background-color: #192231;">
+    <header id="create-new-header-banner" class="header-banner">
+        <a href="\" class="header-banner-logo">
+            <img src="/public/images/icons/logoWhite.svg" alt="Lame Engine 2D Logo">
+        </a>
+    </header>
+    <main id="create-main" class="flex-main-centered">
+        <section class="main-content-section" id="terms-main-section">
+            <section class="m-top-1">
+                <h1><span class="uppercase x-large-font">Create New Game</span></h1>
+                <form name="createGameForm" id="createGameForm" class="body-form">
+                    <fieldset class="body-form-input-container">
+                        <label class="body-form-label" for="gameName"><span class="uppercase">Game
+                                Name</span></label>
+                        <input class="body-form-input m-top-1" type="text" id="gameName" name="gameName"
+                            placeholder="Some Lame Game...">
+                    </fieldset>
+                    <fieldset class="body-form-input-container m-top-3">
+                        <label class="body-form-label" for="gameDescription"><span
+                                class="uppercase">Description</span></label>
+                        <textarea class="body-form-input m-top-1 textarea-noresize" id="gameDescription"
+                            name="gameDescription" placeholder="Some Lame Game Description..." rows="5"
+                            cols="50"></textarea>
+                    </fieldset>
+                    <fieldset class="main-content-form-field m-top-3">
+                        <button class="primary-btn" type="submit" id="createButton">
+                            <span class="uppercase">Create</span>
+                        </button>
+                    </fieldset>
+                </form>
+            </section>
+        </section>
+    </main>
+    <script type="module">
+        import Requests from "/public/scripts/common/utility/http/requests.js";
+        import EventType from "/public/scripts/common/constants/eventType.js";
+        import Form from "/public/scripts/common/utility/forms/form.js";
+        import ResponseType from "/public/scripts/common/constants/responseType.js";
+        import RequestType from "/public/scripts/common/constants/requestType.js";
+        import Endpoints from "/public/scripts/common/constants/endpoints.js";
+
+        class CreateNew {
+            constructor(form, apiRequests, apiURL) {
+                if (!(form instanceof Form)) {
+                    throw new Error("Provided Form object is not of type Form")
+                } else if (!(apiRequests instanceof Requests)) {
+                    throw new Error("Provided ApiRequests object is not of type Requests")
+                }
+
+                this._form = form;
+                this._requests = apiRequests;
+                this._apiURL = apiURL;
+            }
+
+            get form() {
+                return this._form;
+            }
+
+            createNewGame(userObject = null) {
+                if (!this._form.formData) {
+                    throw new Error("Form not submitted");
+                }
+
+                const params = {
+                    name: this._form.formData.gameName,
+                    description: this._form.formData.gameDescription,
+                }
+                const header = new Headers();
+                header.append("Content-Type", "application/json");
+
+                this._requests.sendRequestXHR(this._apiURL, params, header, ResponseType.JSON, RequestType.POST)
+                    .then(response => {
+                        if (confirm("New Game Created Successfully!")) {
+                            window.location.pathname = "/create/workspace";
+                        }
+                    })
+                    .catch(err => {
+                        alert("Failed to create new game! Please try again.");
+                    });
+            }
+        }
+
+        const createGameForm = new Form("createGameForm");
+        const apiRequest = new Requests();
+        const apiURL = Endpoints.server + "/create/new-game";
+        const createGame = new CreateNew(createGameForm, apiRequest, apiURL);
+        window.addEventListener(EventType.FORM.SUBMIT, createGame.form);
+        window.addEventListener(EventType.FORM.SUBMIT, (event) => {
+            createGame.createNewGame();
+        });
+    </script>
+</body>
+
+</html>

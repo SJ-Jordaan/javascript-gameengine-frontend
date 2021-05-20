@@ -22,12 +22,16 @@ fieldset {
     display: flex;
 }
 
-.nav-form-input-container {
+.nav-form-input-inline-container {
     width: 480px;
     display: flex;
 }
 
-.nav-label {
+.input-width-auto {
+    width: auto;
+}
+
+.nav-form-label-inline {
     padding: 0;
     text-align: left;
     display: flex;
@@ -35,7 +39,7 @@ fieldset {
     font-weight: 400;
 }
 
-.nav-input {
+.nav-form-input-inline {
     padding: 0;
     padding-left: 3px;
     padding-right: 3px;

@@ -13,12 +13,59 @@ class CardBuilder {
         }
     }
 
+    createInlineCard(card) {
+        if (!(card instanceof Card)) {
+            throw new TypeError("Provided Card is not of type Card");
+        }
+        const cardObject = document.createElement("section");
+        cardObject.id = "inline-card-object";
+        cardObject.classList.add("dynamic-inline-card");
+        if (card.colour) {
+            cardObject.style.backgroundColor = card.colour.colourToString();
+        }
+
+        if (card.image) {
+            const cardImage = document.createElement("img");
+            cardImage.id = "inline-card-image";
+            cardImage.src = card.image;
+            cardObject.appendChild(cardImage);
+        }
+
+        const cardContent = document.createElement("div");
+        cardContent.id = "inline-card-content";
+        cardContent.classList.add("dynamic-inline-card-content");
+        if (card.title) {
+            const cardBodyTitle = document.createElement("a");
+            cardBodyTitle.id = "card-body-title";
+            cardBodyTitle.innerHTML = card.title;
+            cardContent.appendChild(cardBodyTitle);
+        }
+
+        if (card.buttons && Array.isArray(card.buttons)) {
+            card.buttons.forEach((button) => {
+                const bodyButton = document.createElement("button");
+                bodyButton.onclick = button.action;
+                bodyButton.innerHTML = button.title;
+                bodyButton.id = button.id;
+                bodyButton.classList.add("dynamic-card-button-sm");
+                bodyButton.style.backgroundColor = button.colour.colourToString();
+                bodyButton.style.fontSize = button.fontSize;
+                bodyButton.style.marginLeft = "auto";
+                cardContent.appendChild(bodyButton);
+            });
+        }
+
+        cardObject.appendChild(cardContent);
+
+        return cardObject;
+    }
+
     createGenericCard(card) {
         if (!(card instanceof Card)) {
             throw new TypeError("Provided Card is not of type Card");
         }
 
-        const cardObject = document.createElement("div");
+        const cardObject = document.createElement("section");
         cardObject.id = "card-object";
         cardObject.classList.add("dynamic-card");
         if (card.colour) {
@@ -66,18 +113,20 @@ class CardBuilder {
             cardBodyContainer.appendChild(cardBodyTitle);
         }
 
-        if (card.bodyText) {
-            const cardBodyText = document.createElement("p");
-            cardBodyText.id = "card-body-text";
-            cardBodyText.innerText = card.bodyText;
-            cardBodyText.classList.add("dynamic-card-text");
-            if (card.center) {
-                cardBodyText.style.textAlign = "center";
+        if (card.bodyText || (card.buttons && Array.isArray(card.buttons))) {
+            if (card.bodyText) {
+                const cardBodyText = document.createElement("p");
+                cardBodyText.id = "card-body-text";
+                cardBodyText.innerText = card.bodyText;
+                cardBodyText.classList.add("dynamic-card-text");
+                if (card.center) {
+                    cardBodyText.style.textAlign = "center";
+                }
+                if (card.whiteText) {
+                    cardBodyText.style.color = PresetColours.Light.colourToString();
+                }
+                cardBodyContainer.appendChild(cardBodyText);
             }
-            if (card.whiteText) {
-                cardBodyText.style.color = PresetColours.Light.colourToString();
-            }
-            cardBodyContainer.appendChild(cardBodyText);
             if (card.buttons && Array.isArray(card.buttons) && card.buttons.length > 0) {
                 cardBodyContainer.appendChild(this.createButtonContainer(card.buttons, card.center));
             }

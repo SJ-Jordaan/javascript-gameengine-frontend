@@ -27,6 +27,10 @@ fieldset {
     display: flex;
 }
 
+.input-width-auto {
+    width: auto;
+}
+
 .nav-form-label-inline {
     padding: 0;
     text-align: left;

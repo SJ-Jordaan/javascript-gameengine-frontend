@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/public/images/icons/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/public/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/public/css/main-navbar.css">
+    <link rel="stylesheet" type="text/css" href="/public/css/main-searchbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>LAME|Engine2D</title>
+</head>
+
+<body>
+    <header class="header-sm">
+        <nav class="navbar navbar-border-sm">
+            <img class="nav-icon-sm" src="/public/images/icons/logo.svg" alt="Lame Engine 2D Logo">
+            <ul class="nav-list">
+                <li style="margin-right: 10px;">
+                    <button class="primary-btn-sm" id="synchronize">synchronize</button>
+                </li>
+                <li>
+                    <button class="primary-btn-sm secondary-btn" id="save">save</button>
+                </li>
+            </ul>
+
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-btn-sm"><i class="fa fa-bars"></i></button>
+                <div class="nav-dropdown-content">
+                    <a href="/gameEngine/create"><span class="uppercase">Create</span></a>
+                    <a href="/myprojects"><span class="uppercase">My projects</span></a>
+                    <a href="/login" style="color: red;"><span class="uppercase">Login</span></a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="main-section">
+            <aside class="sidebar" id="entityExplorer">
+                <div classs="sidebar-header">
+                    <button class="sidebar-close-btn" id="entitySidebarToggleOff"><i class="fa fa-times"
+                            aria-hidden="true"></i>
+                    </button>
+                </div>
+                <section class="sidebar-content">
+                    <h2><span class="uppercase">Entities</span></h2>
+                </section>
+            </aside>
+            <aside class="sidebar" id="sceneSettings">
+                <div classs="sidebar-header">
+                    <button class="sidebar-close-btn" id="sceneSettingsToggleOff"><i class="fa fa-times"
+                            aria-hidden="true"></i>
+                    </button>
+                </div>
+                <section class="sidebar-content">
+                    <h2><span class="uppercase">Scene Manager</span></h2>
+                </section>
+            </aside>
+            <aside id="settingsBar" class="sidebar-right">
+                <div class="bottombar-header">
+                    <button class="sidebar-close-btn-right" id="settingsBarToggleOff"><i class="fa fa-times"
+                            aria-hidden="true"></i>
+                    </button>
+                </div>
+                <section class="sidebar-content">
+                    <h2><span class="uppercase">Entity Settings</span></h2>
+                    <h4 style="margin: 0;" id="entityName">Entity Name</h4>
+                    <hr class="full-hr">
+                    <div class="accordion">
+                        <section>
+                            <input type="radio" name="transform_accordion" id="sectionTransform" class="accordionInput">
+                            <label for="sectionTransform" class="accordionLabel"><span
+                                    class="uppercase">Transform</span></label>
+                            <div>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
+                                    dolor. Aenean massa. Cum sociis
+                                    natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec
+                                    quam felis, ultricies nec, pellentesque
+                                    eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla
+                                    vel, aliquet nec, vulputate eget,
+                                    arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum
+                                    felis eu pede mollis pretium.
+                                    Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate
+                                    eleifend tellus. Aenean leo ligula,
+                                    porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in,
+                                    viverra quis, feugiat a, tellus.
+                                    Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet.
+                                    Etiam ultricies nisi vel augue.
+                                    Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus,
+                                    tellus eget condimentum rhoncus, sem
+                                    quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit
+                                    vel, luctus pulvinar, hendrerit id,
+                                    lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero
+                                    venenatis faucibus. Nullam quis ante.
+                                    Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit
+                                    amet nibh. Donec sodales sagittis
+                                    magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,
+                                </p>
+                            </div>
+                        </section>
+                    </div>
+
+                </section>
+            </aside>
+
+            <section id="main">
+                <aside class="absolute-aside" style="top:35px">
+                    <button class="sidebar-open-btn" id="entitySidebarToggleOn"><i class="fa fa-cube"
+                            aria-hidden="true"></i>
+                    </button>
+                    <button class="sidebar-open-btn" id="sceneSettingsToggleOn"><i class="fa fa-video-camera"
+                            aria-hidden="true"></i>
+                    </button>
+                </aside>
+                <aside class="absolute-aside aside-right" style="top: 35px;">
+                    <button class="sidebar-open-btn" id="settingsBarToggleOn"><i class="fa fa-cog"
+                            aria-hidden="true"></i>
+                    </button>
+                </aside>
+                <section style="background-color: blue; width: 100%; height: 100%;">
+
+                </section>
+            </section>
+        </section>
+
+    </main>
+    <script type="module">
+        import EventType from "/public/scripts/common/constants/eventType.js"
+
+        const sceneSettings = document.getElementById("sceneSettings");
+        const entityExplorer = document.getElementById("entityExplorer");
+        const settingsBar = document.getElementById("settingsBar");
+        const main = document.getElementById("main");
+
+        const entitySideBarToggleOn = document.getElementById("entitySidebarToggleOn");
+        const sceneSettingsToggleOn = document.getElementById("sceneSettingsToggleOn");
+
+        const settingsBarToggleOn = document.getElementById("settingsBarToggleOn")
+        const settingsBarToggleOff = document.getElementById("settingsBarToggleOff")
+
+        const synchronize = document.getElementById("synchronize");
+        synchronize.addEventListener(EventType.MOUSE.CLICK, (event) => {
+            alert("Synchronized successfully");
+        });
+
+        const save = document.getElementById("save");
+        save.addEventListener(EventType.MOUSE.CLICK, (event) => {
+            alert("Saved successfully");
+        });
+
+        settingsBarToggleOn.addEventListener(EventType.MOUSE.CLICK, (event) => {
+            settingsBar.style.width = "250px"
+            main.style.marginRight = "250px";
+            settingsBarToggleOn.style.background = "gray";
+        });
+
+        settingsBarToggleOff.addEventListener(EventType.MOUSE.CLICK, (event) => {
+            settingsBar.style.width = "0px"
+            main.style.marginRight = "0px";
+            settingsBarToggleOn.style.background = "black";
+        })
+
+        entitySideBarToggleOn.addEventListener(EventType.MOUSE.CLICK, (event) => {
+            if (entityExplorer.style.width.indexOf("250") > -1) {
+                entityExplorer.style.zIndex = 5;
+                sceneSettings.style.zIndex = 4;
+            } else {
+                entityExplorer.style.width = "250px";
+                entityExplorer.style.zIndex = 5;
+                sceneSettings.style.zIndex = 4;
+            }
+            main.style.marginLeft = "250px";
+            entitySideBarToggleOn.style.background = "gray";
+            sceneSettingsToggleOn.style.background = "black";
+        });
+
+
+        sceneSettingsToggleOn.addEventListener(EventType.MOUSE.CLICK, (event) => {
+            if (sceneSettings.style.width.indexOf("250") > -1) {
+                sceneSettings.style.zIndex = 5;
+                entityExplorer.style.zIndex = 4;
+            } else {
+                sceneSettings.style.width = "250px";
+                sceneSettings.style.zIndex = 5;
+                entityExplorer.style.zIndex = 4;
+            }
+            main.style.marginLeft = "250px";
+
+            sceneSettingsToggleOn.style.background = "gray"
+            entitySideBarToggleOn.style.background = "black";
+        });
+
+        const sceneSettingsToggleOff = document.getElementById("sceneSettingsToggleOff");
+        sceneSettingsToggleOff.addEventListener(EventType.MOUSE.CLICK, (event) => { closeMenus(); });
+
+        const entitySideBarToggleOff = document.getElementById("entitySidebarToggleOff");
+        entitySideBarToggleOff.addEventListener(EventType.MOUSE.CLICK, (event) => { closeMenus(); });
+
+        function closeMenus() {
+            sceneSettings.style.width = "0px";
+            entityExplorer.style.width = "0px";
+            main.style.marginLeft = "0px";
+            entitySideBarToggleOn.style.background = "black";
+            sceneSettingsToggleOn.style.background = "black"
+        }
+
+    </script>
+</body>
+
+
+</html>

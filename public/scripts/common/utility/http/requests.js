@@ -4,7 +4,6 @@ import RequestType from "/public/scripts/common/constants/requestType.js";
 class Requests {
     constructor() {
         this.xhr = new XMLHttpRequest();
-        this.url = undefined;
         this.respType = undefined;
     }
 
@@ -73,9 +72,7 @@ class Requests {
                 break;
             case RequestType.PUT:
                 this.xhr.open(RequestType.PUT, url);
-                if (params) {
-                    this.xhr.setRequestHeader("Content-Type", "application/json");
-                }
+                break;
             case RequestType.POST:
                 this.xhr.open(RequestType.POST, url);
                 break;
@@ -83,8 +80,8 @@ class Requests {
                 break;
         }
 
-        headers?.entries.forEach((headerName, headerValue) => {
-            this.xhr.setRequestHeader(headerName, headerValue);
+        headers.forEach((value, key) => {
+            this.xhr.setRequestHeader(key, value);
         });
 
         this.xhr.responseType = responseType;

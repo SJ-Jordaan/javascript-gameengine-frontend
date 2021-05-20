@@ -5,6 +5,7 @@ html {
     --scrollbarBackground: #cfd8dc;
     --thumbBackground: #90a4ae;
     overflow-y: auto;
+    width: 100vw;
 }
 
 /* Works on Firefox */
@@ -63,7 +64,12 @@ main hr {
     height: 2px;
 }
 
-.primary-button {
+.full-hr {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.primary-btn {
     border: none;
     color: white;
     /* padding: 6px 12px; */
@@ -80,6 +86,29 @@ main hr {
     background-color: rgba(2, 117, 216, 1);
 }
 
+.primary-btn-sm {
+    border: none;
+    color: white;
+    /* padding: 6px 12px; */
+    padding: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 16px;
+    border-radius: 4px;
+    height: 20px;
+    margin: 0;
+    background-color: rgba(2, 117, 216, 1);
+    vertical-align: middle;
+}
+
+.secondary-btn {
+    background-color: rgba(92, 184, 92, 1);
+}
 .uppercase {
     text-transform: uppercase;
 }
@@ -175,4 +204,81 @@ footer {
     margin: 0;
     height: 30px;
     float: right;
+}
+
+.body-form {
+    width: 100%;
+    padding: 0;
+}
+
+.m-top-1 {
+    margin-top: 5px;
+}
+
+.m-top-2 {
+    margin-top: 15px;
+}
+
+.m-top-3 {
+    margin-top: 20px;
+}
+
+.m-top-4 {
+    margin-top: 30px;
+}
+
+.width-100 {
+    width: 100%;
+}
+
+.body-form-dropdown-container {
+    width: 100%;
+    display: flex;
+}
+
+.body-form-input-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.body-form-label {
+    padding: 0;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+    width: 100%;
+}
+
+.body-form-input {
+    text-align: left;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 3px;
+    letter-spacing: inherit;
+    height: auto;
+    flex-grow: 1;
+    border-radius: 3px;
+    letter-spacing: 2px;
+}
+
+.textarea-noresize {
+    resize: none;
+    overflow-y: auto;
+}
+
+#main {
+    top: 0;
+    position: absolute;
+    width: 100vw;
+    height: 96vh;
+    transition: margin 0.5s;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.main-section {
+    display: flex;
+    margin-top: 5px;
 }

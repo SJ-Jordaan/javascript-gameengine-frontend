@@ -1,5 +1,5 @@
-import ResponseType from "/js/common/constants/responseType.js";
-import RequestType from "/js/common/constants/requestType.js";
+import ResponseType from "/public/scripts/common/constants/responseType.js";
+import RequestType from "/public/scripts/common/constants/requestType.js";
 
 class Requests {
     constructor() {

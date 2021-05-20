@@ -30,7 +30,7 @@ export class CoreEngine {
         this._posForm = document.getElementById("positionForm");
         this._rotForm = document.getElementById("rotationForm");
         this._scaleForm = document.getElementById("scaleForm");
-
+        this._filtEntForm = document.getElementById("filterEntitiesForm");
         this.currentMode = EngineModes.designing;
 
         //methods
@@ -70,6 +70,24 @@ export class CoreEngine {
         surface_5.x = 20;
         surface_5.y = 20;
         this.games[this.currentGameIndex].scenes[0].addChild(surface_5);
+    }
+
+    filterEntities() {
+        const entities = document.getElementById("entities");
+
+        this._filtEntForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
+            ev.preventDefault();
+            const fData = new FormData(ev.target);
+            const values = {};
+
+            for (let keyval of fData.entries()) {
+                values[keyval[0]] = keyval[1];
+            }
+
+            // clear entities before populating
+            // entities.innerHTML = "";
+            console.log(`Filtering By: ${values.type}`);
+        });
     }
 
     initializeEntitySettings() {
@@ -211,6 +229,7 @@ export class CoreEngine {
             this.stage.addChild(scene);
         });
         this.initializeEntitySettings();
+        this.filterEntities();
 
         // this.loadEntitiesToWorkspace();
         PIXI.Ticker.shared.add(this.render);

@@ -43,6 +43,26 @@ body::-webkit-scrollbar {
     width: 15px;
 }
 
+*::-webkit-file-upload-button {
+    border: none;
+    color: white;
+    padding: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    font-family: "Barlow Condensed", "Noto Sans JP", sans-serif;
+    font-size: 14px;
+    border-radius: 4px;
+    height: 20px;
+    margin: 0;
+    margin-right: 5px;
+    background-color: rgba(2, 117, 216, 1);
+    vertical-align: middle;
+}
+
 body::-webkit-scrollbar-track {
     background: var(--thumbBackground);
     border-radius: 10px;
@@ -291,6 +311,10 @@ footer {
 
 .m-0 {
     margin: 0;
+}
+
+.p-0 {
+    padding: 0;
 }
 
 .width-100 {

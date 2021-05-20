@@ -22,12 +22,20 @@
         <nav class="navbar navbar-border-sm">
             <img class="nav-icon-sm" src="/public/images/icons/logo.svg" alt="Lame Engine 2D Logo">
             <ul class="nav-list">
-                <li style="margin-right: 10px;">
-                    <button class="primary-btn-sm" id="play-button">play</button>
+                <li class="m-0">
+                    <button class="nav-dropdown-btn-sm  m-0 p-0" id="play-button"><i class="fa fa-play"
+                            aria-hidden="true"></i>
+                    </button>
                 </li>
-                <li style="margin-right: 10px;">
-                    <button class="primary-btn-sm" id="stop-button">pause</button>
-                    <button class="primary-btn-sm" id="stop-button">stop</button>
+                <li class="m-0">
+                    <button class="nav-dropdown-btn-sm m-0 p-0" id="stop-button"><i class="fa fa-pause"
+                            aria-hidden="true"></i>
+                    </button>
+                </li>
+                <li class="m-0">
+                    <button class="nav-dropdown-btn-sm  m-0 p-0" id="stop-button"><i class="fa fa-stop"
+                            aria-hidden="true"></i>
+                    </button>
                 </li>
                 <li style="margin-right: 10px;">
                     <button class="primary-btn-sm" id="synchronize">synchronize</button>
@@ -66,8 +74,8 @@
                                     form="filterEntitiesForm">
                                     <option value="all">All</option>
                                     <option value="character">Characters</option>
-                                    <option value="Surface">Surfaces</option>
-                                    <option value="Decorative">Decorative</option>
+                                    <option value="surface">Surfaces</option>
+                                    <option value="background">Background</option>
                                 </select>
                             </section>
                             <button type="submit" class="btn float-right"><i class="fa fa-refresh"

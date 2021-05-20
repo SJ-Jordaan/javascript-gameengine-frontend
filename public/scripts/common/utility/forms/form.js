@@ -70,7 +70,7 @@ class Form {
     handleEvent(event) {
         event.preventDefault();
         this._formData = this.getFormData();
-
+        console.log(event);
         this._eventsAndHandlers.forEach((ev) => {
             if (event.type === ev.EventType) {
                 ev.Handler(this._formData);

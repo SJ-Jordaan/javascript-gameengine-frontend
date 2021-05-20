@@ -54,7 +54,7 @@ export class BaseEntity extends PIXI.Sprite {
             });
 
             siblings.forEach((sibling) => {
-                if (sibling.type === EntityType.surface) {
+                if (sibling.type !== EntityType.background) {
                     if (
                         Math.abs(this.getBounds().top - sibling.getBounds().bottom) < snapDistance &&
                         this.x <= sibling.getBounds().right &&
@@ -96,7 +96,7 @@ export class BaseEntity extends PIXI.Sprite {
             });
 
             siblings.forEach((sibling) => {
-                if (sibling.type !== EntityType.surface) {
+                if (sibling.type !== EntityType.background) {
                     if (this.vertexPoints.topLeft.distanceTo(sibling.vertexPoints.bottomRight) <= snapDistance) {
                         this.x = sibling.x + sibling.getBounds().width;
                         this.y = sibling.y + sibling.getBounds().height;
@@ -123,23 +123,32 @@ export class BaseEntity extends PIXI.Sprite {
         let siblings = this.parent.children.filter((element) => {
             return element.name !== this.name;
         });
-
         return siblings;
     }
 
-    transformX(transformOffset) {
-        this.x += transformOffset;
+    moveX(delta) {
+        this.x += delta;
         this.updateVertexPoints();
     }
 
-    transformY(transformOffset) {
-        this.y += transformOffset;
+    moveY(delta) {
+        this.y += delta;
         this.updateVertexPoints();
     }
 
-    transformEntity(transformOffsetX, transformOffsetY) {
-        this.transformX(transformOffsetX);
-        this.transformY(transformOffsetY);
+    translateEntity(x, y) {
+        this.setTransform(x, y);
+        this.updateVertexPoints();
+    }
+
+
+    rotateEntity(rotation) {
+        this.setTransform(this.position.x, this.position.y, this.scale.x, this.scale.y, rotation);
+        this.setTransform(this.position.x, this.position.y, this.scale.x, this.scale.y, rotation);
+    }
+
+    scaleEntity(scaleX, scaleY) {
+        this.setTransform(this.position.x, this.position.y, scaleX, scaleY, this.rotation);
     }
 
     rotateEntity(rotation) {

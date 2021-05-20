@@ -14,12 +14,6 @@ export class GameScene extends PIXI.Container {
                 changed: true,
             },
         });
-
-        this.enableVertexSnap = this.enableVertexSnap.bind(this);
-        this.disableVertexSnap = this.disableVertexSnap.bind(this);
-        this.enableEdgeSnap = this.enableEdgeSnap.bind(this);
-        this.disableEdgeSnap = this.disableEdgeSnap.bind(this);
-        this.setGravity = this.setGravity.bind(this);
     }
 
     enableEdgeSnap() {

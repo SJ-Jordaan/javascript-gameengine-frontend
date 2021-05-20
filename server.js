@@ -11,7 +11,6 @@ const {
 	RequestMethod,
 } = require("./src/common/utility/requests/requests");
 const Param = require("./src/common/utility/requests/param");
-const welcomeRouter = require("./routes/welcomeRouter");
 
 // Define Express App
 const app = express();
@@ -19,7 +18,6 @@ app.use(homeRouter);
 app.use(engineRouter);
 app.use(exploreRouter);
 app.use(createRouter);
-app.use(welcomeRouter);
 app.use(authRouter);
 
 // Serve Static Assets

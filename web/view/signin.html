@@ -6,12 +6,12 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="/public/css/signin.css" />
 
-		<title>Game Engine</title>
+		<title>Sign in</title>
 	</head>
 
 	<body>
 		<!-- method="POST"  action="index.html"-->
-		<form class="game" id="loginForm" action="welcome.html">
+		<form class="game" id="loginForm" >
 			<h1>Login</h1>
 			<input
 				type="text"
@@ -28,10 +28,19 @@
 			<input type="submit" value="Login" id="btnSign" onclick="logIn()" />
 			<a href="signup"><p>New here? sign up</p></a>
 		</form>
+		<button onclick="logOut()">Logout</button>
+
 		<div id="snackbar">Error</div>
+		
 
 		<script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
 		<script src="/public/scripts/googleInitializer.js"></script>
 		<script src="/public/scripts/signin.js"></script>
+		<script>
+			function logOut() {
+				firebase.auth().signOut();
+				sessionStorage.clear();
+			}
+		</script>
 	</body>
 </html>

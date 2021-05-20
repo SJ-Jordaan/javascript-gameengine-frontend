@@ -19,6 +19,19 @@ export class CoreEngine {
         this.currentGameIndex = 0;
         this.games = [];
 
+        this._entityContainerId = "entities";
+        this._entities = document.getElementById(this._entityContainerId);
+
+        this._posForm = document.getElementById("positionForm");
+        this._rotForm = document.getElementById("rotationForm");
+        this._scaleForm = document.getElementById("scaleForm");
+        this._filtEntForm = document.getElementById("filterEntitiesForm");
+
+        this._scenesList = document.getElementById("activeScene");
+        this._changeSceneForm = document.getElementById("changeSceneForm");
+        this._createSceneForm = document.getElementById("createSceneForm");
+        this._entityType = document.getElementById("entityType");
+
         this.currentMode = EngineModes.designing;
 
         //methods
@@ -119,6 +132,235 @@ export class CoreEngine {
         this._scaleForm.addEventListener(EventType.FORM.SUBMIT, this.scaleEntityHandler);
     }
 
+    filterEntities() {
+        const entities = document.getElementById("entities");
+
+        this._filtEntForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
+            ev.preventDefault();
+            const fData = new FormData(ev.target);
+            const values = {};
+
+            for (let keyval of fData.entries()) {
+                values[keyval[0]] = keyval[1];
+            }
+
+            // clear entities before populating
+            // entities.innerHTML = "";
+            console.log(`Filtering By: ${values.type}`);
+        });
+    }
+
+    addScenes() {
+        if (this._scenesList) {
+            this._scenesList.innerHTML = "";
+
+            this.games[0].scenes.forEach((scene) => {
+                let option = document.createElement("option");
+                option.text = scene.name;
+                option.value = scene.name;
+                this._scenesList.add(option);
+            });
+        }
+    }
+
+    changeScene() {
+        this._changeSceneForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
+            ev.preventDefault();
+
+            const fData = new FormData(ev.target);
+            const formValues = {};
+
+            for (let keyval of fData.entries()) {
+                formValues[keyval[0]] = keyval[1];
+            }
+
+            if (formValues) {
+                const index = this.games[this.currentGameIndex].getSceneIndex(formValues.activeScene);
+
+                if (index && index > -1) {
+                    this.games[this.currentGameIndex].currentGameIndex = index;
+
+                    console.log(this.games[this.currentGameIndex].scenes);
+                    this.games[this.currentGameIndex].scenes.forEach((scene) => {
+                        const currIndex = this.games[this.currentGameIndex].scenes.findIndex((x) => {
+                            if (x.name === scene.name) return true;
+                        });
+
+                        if (currIndex !== index) {
+                            scene.visible = false;
+                        } else {
+                            console.log(scene);
+                            scene.visible = true;
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    createScene() {
+        this._createSceneForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
+            ev.preventDefault();
+            const fData = new FormData(ev.target);
+            const formValues = {};
+
+            for (let keyval of fData.entries()) {
+                formValues[keyval[0]] = keyval[1];
+            }
+
+            if (formValues) {
+                const hasErrors = false;
+                if (!formValues?.sceneGravity) {
+                    alert("Scene Creation Failed, no gravity selected!");
+                    hasErrors = true;
+                } else if (!formValues?.sceneHeight && parseFloat(formValues?.sceneHeight) > 0) {
+                    alert("Scene Creation Failed, no height selected!");
+                    hasErrors = true;
+                } else if (!formValues?.sceneWidth && parseFloat(formValues?.sceneWidth) > 0) {
+                    alert("Scene Creation Failed, no width selected!");
+                    hasErrors = true;
+                } else if (!formValues?.sceneName) {
+                    alert("Scene Creation Failed, no name provided!");
+
+                    if (this.games[this.currentGameIndex].getSceneIndex(formValues.sceneName) > -1) {
+                        alert("Scene Creation Failed, scene name already exists!");
+                    }
+                    hasErrors = true;
+                }
+
+                if (hasErrors) {
+                    return undefined;
+                }
+
+                this.games[this.currentGameIndex].init(
+                    formValues.sceneWidth,
+                    formValues.sceneHeight,
+                    formValues.sceneName
+                );
+
+                this.stage.addChild(
+                    this.games[this.currentGameIndex].getSceneAtIndex(
+                        this.games[this.currentGameIndex].getSceneIndex(formValues.sceneName)
+                    )
+                );
+
+                this.addScenes();
+                confirm(`Scene ${formValues.sceneName} created Succesfully!`);
+            }
+        });
+    }
+
+    initializeScenes() {
+        this.addScenes();
+        this.changeScene();
+        this.createScene();
+    }
+
+    initializeEntitySettings() {
+        // this._posForm = new Form("rotationForm");
+        // this._rotForm = new Form("rotationForm");
+        // this._scaleForm = new Form("scaleForm");
+        const scene = this.games[this.currentGameIndex].getCurrentScene();
+
+        window.addEventListener("entityChanged", (e) => {
+            if (scene) {
+                const index = scene.children.findIndex((e) => {
+                    if (e.name === scene.selectedEntityName) return true;
+                });
+
+                if (index > -1) {
+                    // position
+                    document.getElementById("xPosition").value = scene.children[index].transform.position.x.toFixed(2);
+                    document.getElementById("yPosition").value = scene.children[index].transform.position.y.toFixed(2);
+
+                    // Scale
+                    document.getElementById("xScale").value = scene.children[index].transform.scale.x.toFixed(2);
+                    document.getElementById("yScale").value = scene.children[index].transform.scale.y.toFixed(2);
+
+                    // Rotation
+                    document.getElementById("rotationDeg").value = scene.children[index].transform.rotation.toFixed(2);
+                }
+            }
+        });
+
+        this._posForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
+            ev.preventDefault();
+            const fData = new FormData(ev.target);
+            const formValues = {};
+
+            for (let keyval of fData.entries()) {
+                formValues[keyval[0]] = keyval[1];
+            }
+
+            if (!fData) {
+                alert("Invalid form submitted");
+            }
+
+            if (scene) {
+                const index = scene.children.findIndex((e) => {
+                    if (e.name === scene.selectedEntityName) return true;
+                });
+
+                if (index > -1) {
+                    scene.children[index].transformEntity(parseFloat(formValues.x), parseFloat(formValues.y));
+                }
+            }
+        });
+
+        this._rotForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
+            ev.preventDefault();
+            const fData = new FormData(ev.target);
+            const formValues = {};
+
+            for (let keyval of fData.entries()) {
+                formValues[keyval[0]] = keyval[1];
+            }
+
+            if (!fData) {
+                alert("Invalid form submitted");
+            }
+
+            if (scene) {
+                const index = scene.children.findIndex((e) => {
+                    if (e.name === scene.selectedEntityName) return true;
+                });
+
+                if (index > -1) {
+                    scene.children[index].rotateEntity(this.degrees_to_radians(parseFloat(formValues.degrees)));
+                }
+            }
+        });
+
+        this._scaleForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
+            ev.preventDefault();
+            const fData = new FormData(ev.target);
+            const formValues = {};
+
+            for (let keyval of fData.entries()) {
+                formValues[keyval[0]] = keyval[1];
+            }
+
+            if (!fData) {
+                alert("Invalid form submitted");
+            }
+
+            if (scene) {
+                const index = scene.children.findIndex((e) => {
+                    if (e.name === scene.selectedEntityName) return true;
+                });
+
+                if (index > -1) {
+                    scene.children[index].scaleEntity(parseFloat(formValues.x), parseFloat(formValues.y));
+                }
+            }
+        });
+    }
+
+    degrees_to_radians(degrees) {
+        var pi = Math.PI;
+        return degrees * (pi / 180);
+    }
+
     init() {
         const renderer = PIXI.autoDetectRenderer({
             antalias: true,
@@ -143,8 +385,10 @@ export class CoreEngine {
         this.games[this.currentGameIndex].scenes.forEach((scene) => {
             this.stage.addChild(scene);
         });
-        // this.initializeEntitySettings();
 
+        this.initializeEntitySettings();
+        this.filterEntities();
+        this.initializeScenes();
         PIXI.Ticker.shared.add(this.render);
     }
 
@@ -229,7 +473,7 @@ export class CoreEngine {
 
     createGame(gameName) {
         let game = new Game(gameName);
-        game.init(this.renderer.view.width, this.renderer.view.height);
+        game.init(this.renderer.view.width, this.renderer.view.height, "gameScene");
         this.games.push(game);
     }
 
@@ -272,7 +516,8 @@ export class CoreEngine {
 
     createGameEntity(texture = PIXI.utils.TextureCache["blueTile"]) {
         const index = this.games[this.currentGameIndex].scenes[0].children.length;
-
+        console.log(this._entityType);
+        console.log(this._entityType.value);
         const gameEntity = new AnimatableEntity(texture, "untitled" + index);
         gameEntity.x = this.renderer.screen.width / 2;
         gameEntity.y = this.renderer.screen.height / 2;

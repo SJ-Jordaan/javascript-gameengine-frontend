@@ -28,19 +28,8 @@ export class CoreEngine {
         this._entities = document.getElementById(this._entityContainerId);
 
         this._posForm = document.getElementById("positionForm");
-<<<<<<< HEAD
-        this._rotForm = new Form("rotationForm");
-
-        this._posForm.onsubmit = (ev) => {
-            const values = Array.from(document.querySelectorAll("#positionForm input")).reduce(
-                (acc, input) => ({ ...acc, [input.id]: input.value }),
-                {}
-            );
-        };
-=======
         this._rotForm = document.getElementById("rotationForm");
         this._scaleForm = document.getElementById("scaleForm");
->>>>>>> 17e24750e2c6b81a9f2acb5f707bd5122ce23cd4
 
         this.currentMode = EngineModes.designing;
 

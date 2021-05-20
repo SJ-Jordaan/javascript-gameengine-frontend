@@ -1,10 +1,23 @@
+html {
+    --header-height: 50px;
+    --header-height-sm: 30px;
+    --nav-icon-height: 30px;
+    --nav-icon-height-sm: 20px;
+}
+
 header {
     width: 100%;
-    height: 50px;
+    height: var(--header-height);
     padding: 0;
     margin: 0;
 }
 
+.header-sm {
+    width: 100%;
+    height: var(--header-height-sm);
+    padding: 0;
+    margin: 0;
+}
 .navbar {
     display: flex;
     flex-direction: row;
@@ -13,11 +26,20 @@ header {
     height: 100%;
 }
 
+.navbar-border-sm {
+    border-bottom: 5px solid #192231;
+}
 .nav-icon {
     padding-left: 30px;
-    padding-top: calc((50px - 30px) / 2);
-    width: 180px;
-    height: 30px;
+    padding-top: calc((var(--header-height) - var(--nav-icon-height)) / 2);
+    height: var(--nav-icon-height);
+    margin-right: auto;
+}
+
+.nav-icon-sm {
+    padding-left: 30px;
+    padding-top: calc((var(--header-height-sm) - var(--nav-icon-height-sm)) / 2);
+    height: var(--nav-icon-height-sm);
     margin-right: auto;
 }
 
@@ -26,7 +48,8 @@ header {
     overflow: hidden;
 }
 
-.nav-dropdown .nav-dropdown-btn {
+.nav-dropdown .nav-dropdown-btn,
+.nav-dropdown-btn-sm {
     font-size: 18px;
     border: none;
     outline: none;
@@ -38,7 +61,14 @@ header {
     margin-right: 15px;
 }
 
+.nav-dropdown-btn-sm {
+    font-size: 18px;
+    padding: 5px 10px;
+    margin-top: 0;
+}
+
 .navbar .nav-dropdown-btn:hover,
+.navbar .nav-dropdown-btn-sm:hover,
 .nav-dropdown:hover {
     color: #6e23f1;
     background-color: transparent;
@@ -80,4 +110,145 @@ header {
 
 .nav-dropdown:hover .nav-dropdown-content {
     display: block;
+}
+
+.nav-list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+.nav-list li {
+    list-style: none;
+}
+
+.sidebar {
+    display: flex;
+    position: fixed;
+    top: calc(var(--header-height-sm) + 5px);
+    left: 0;
+    background-color: #dadada;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    width: 0;
+    height: 100%;
+    overflow-x: hidden;
+    transition: all 0.5s ease-in-out;
+    padding-top: 30px;
+}
+
+.sidebar-right {
+    right: 0;
+    display: flex;
+    position: fixed;
+    top: calc(var(--header-height-sm) + 5px);
+    background-color: #dadada;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    width: 0;
+    height: 100%;
+    overflow-x: hidden;
+    transition: all 0.5s ease-in-out;
+    padding-top: 30px;
+    z-index: 3;
+}
+
+.bottombar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 6;
+    background-color: rgba(218, 218, 218, 0.5);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    height: 0;
+    overflow-x: hidden;
+    transition: all 0.5s ease-in-out;
+    /* padding-top: 30px; */
+}
+
+.sidebar-open-btn {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 5px 7px;
+    z-index: 1;
+}
+
+.sidebar-open-btn:hover {
+    background-color: #444;
+}
+
+.sidebar-content {
+    width: 100%;
+    padding-left: 20px;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+}
+
+.bottombar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar-close-btn {
+    font-size: 18px;
+    background: transparent;
+    border-color: transparent;
+    color: hsl(205, 78%, 60%);
+    transition: all 0.3s linear;
+    cursor: pointer;
+    color: rgb(44, 22, 22);
+    position: absolute;
+    top: 0px;
+    right: 5px;
+}
+
+.sidebar-close-btn-right {
+    font-size: 18px;
+    background: transparent;
+    border-color: transparent;
+    color: hsl(205, 78%, 60%);
+    transition: all 0.3s linear;
+    cursor: pointer;
+    color: rgb(44, 22, 22);
+    position: absolute;
+    top: 0px;
+    left: 5px;
+}
+
+.sidebar-close-btn:hover,
+.sidebar-close-btn-right:hover {
+    color: rgb(212, 13, 13);
+    transform: rotate(360deg);
+}
+
+#main {
+    transition: all 0.5s ease-in-out;
+    position: static;
+}
+
+@media screen and (max-height: 450px) {
+    .sidebar {
+        padding-top: 15px;
+    }
+}
+
+.absolute-aside {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+}
+
+.aside-right {
+    right: 0;
+    justify-content: end;
 }

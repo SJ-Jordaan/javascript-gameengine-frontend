@@ -1,4 +1,4 @@
-import {BaseEntity} from "./baseEntity";
+import {BaseEntity, EntityType} from "./baseEntity";
 import {AnimatableEntity} from "./animatableEntity";
 import {GameScene} from "./scene";
 import {detectCollision, freeFall} from "../physics/physicsEngine";
@@ -82,7 +82,7 @@ export default class Game {
     update(delta) {
         const children = this.scenes[this.currentSceneIndex].children;
         children.forEach((element) => {
-            if (element instanceof AnimatableEntity) {
+            if (element instanceof AnimatableEntity && element.type === EntityType["character"]) {
                 element.moveX(1);
                 freeFall(element, delta);
             }

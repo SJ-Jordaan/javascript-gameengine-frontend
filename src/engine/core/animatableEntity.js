@@ -2,13 +2,9 @@ import { BaseEntity, EntityType } from "./baseEntity";
 import {detectCollision} from "../physics/physicsEngine";
 
 export class AnimatableEntity extends BaseEntity {
-    constructor(texture, name, x = 0, y = 0) {
+    constructor(texture, name) {
         super(texture, name);
-        this.setTransform(x, y);
         this.anchor.set(0.5);
-        this.type = EntityType.character;
-
-        //Physics Properties (Should be configurable)
         this.mass = 0;
         this.acceleration = 0;
 
@@ -22,7 +18,6 @@ export class AnimatableEntity extends BaseEntity {
         }
 
         let siblings = this.getSiblings();
-        let offset = 0;
         siblings.forEach(sibling => {
             if(sibling.type === EntityType.surface){
                 if(detectCollision(this, sibling)){

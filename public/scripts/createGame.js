@@ -41,6 +41,7 @@ class CreateNew {
 			.then((newGame) => {
 				console.log(newGame);
 				window.location = `/create/workspace/${newGame.id}`;
+				sessionStorage.setItem("game", newGame.id);
 			})
 			.catch((error) => console.error(error));
 

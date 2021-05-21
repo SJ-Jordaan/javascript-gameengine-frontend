@@ -40,6 +40,10 @@ export class CoreEngine {
 
         this.currentMode = EngineModes.designing;
 
+        // this._gameID = window.location.pathname.split('/');
+        // this._gameID = this._gameID[this._gameID.length - 1];
+        this._gameID = sessionStorage.getItem("game");
+
         this._iDBName = "LameEngine2d";
         this._dbStoreKey = "GameState";
 
@@ -507,21 +511,23 @@ export class CoreEngine {
         }
     }
 
-    async getGameState() {
-        const response = await useAPI("/create");
-        if (response) {
-            //Load Game Data
-        }
-    }
+    // async getGameState() {
+    //     const response = await useAPI("/create");
+    //     if (response) {
+    //         //Load Game Data
+    //     }
+    // }
 
     async synchronizeGame() {
         const state = this.getGameState();
 
-        if (state) {
-            const response = await useAPI("/create", state, RequestType.POST);
+        console.log('Game ID: ' + this._gameID.toString())
+        if (state && this._gameID) {
+            const response = await useAPI(`/games/${this._gameID}`, state, RequestType.POST);
 
             if (response) {
-                confirm("Game Synchronized with DB Successfully!");
+                console.log(response);
+                confirm(`Game Synchronized with DB Successfully: ${this._gameID}`);
             }
         }
     }

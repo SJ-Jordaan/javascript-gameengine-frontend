@@ -519,7 +519,6 @@ export class CoreEngine {
     }
 
     playGame() {
-        this.loadGame();
         this.games[this.currentGameIndex].setGameMode("play");
     }
 

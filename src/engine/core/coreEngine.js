@@ -2,6 +2,8 @@ import {AnimatableEntity} from "./animatableEntity";
 import Game from "./game";
 import EventType from "/public/scripts/common/constants/eventType.js";
 import CardBuilder from "/public/scripts/view-components/cards/cardBuilder.js";
+import { EntityType } from "./baseEntity";
+import { GameScene } from "./scene";
 import {Card, Button, PresetColours, PresetFontSize} from "/public/scripts/view-components/cards/card.js";
 import Requests from "/public/scripts/common/utility/http/requests.js";
 import ResponseType from "/public/scripts/common/constants/responseType.js";
@@ -54,7 +56,6 @@ export class CoreEngine {
         this.render = this.render.bind(this);
         this.playGame = this.playGame.bind(this);
         this.stopGame = this.stopGame.bind(this);
-        // this.initializeEntitySettings = this.initializeEntitySettings.bind(this);
         this.translateEntityHandler = this.translateEntityHandler.bind(this);
         this.scaleEntityHandler = this.scaleEntityHandler.bind(this);
         this.rotateEntityHandler = this.rotateEntityHandler.bind(this);
@@ -70,7 +71,7 @@ export class CoreEngine {
         for (let keyval of fData.entries()) {
             formValues[keyval[0]] = keyval[1];
         }
-
+      
         this.games[this.currentGameIndex]
             .getCurrentSelectedEntity()
             .translateEntity(parseFloat(formValues.x), parseFloat(formValues.y));
@@ -242,106 +243,6 @@ export class CoreEngine {
         this.createScene();
     }
 
-    initializeEntitySettings() {
-        // this._posForm = new Form("rotationForm");
-        // this._rotForm = new Form("rotationForm");
-        // this._scaleForm = new Form("scaleForm");
-        const scene = this.games[this.currentGameIndex].getCurrentScene();
-
-        window.addEventListener("entityChanged", (e) => {
-            if (scene) {
-                const index = scene.children.findIndex((e) => {
-                    if (e.name === scene.selectedEntityName) return true;
-                });
-
-                if (index > -1) {
-                    // position
-                    document.getElementById("xPosition").value = scene.children[index].transform.position.x.toFixed(2);
-                    document.getElementById("yPosition").value = scene.children[index].transform.position.y.toFixed(2);
-
-                    // Scale
-                    document.getElementById("xScale").value = scene.children[index].transform.scale.x.toFixed(2);
-                    document.getElementById("yScale").value = scene.children[index].transform.scale.y.toFixed(2);
-
-                    // Rotation
-                    document.getElementById("rotationDeg").value = scene.children[index].transform.rotation.toFixed(2);
-                }
-            }
-        });
-
-        this._posForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
-            ev.preventDefault();
-            const fData = new FormData(ev.target);
-            const formValues = {};
-
-            for (let keyval of fData.entries()) {
-                formValues[keyval[0]] = keyval[1];
-            }
-
-            if (!fData) {
-                alert("Invalid form submitted");
-            }
-
-            if (scene) {
-                const index = scene.children.findIndex((e) => {
-                    if (e.name === scene.selectedEntityName) return true;
-                });
-
-                if (index > -1) {
-                    scene.children[index].transformEntity(parseFloat(formValues.x), parseFloat(formValues.y));
-                }
-            }
-        });
-
-        this._rotForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
-            ev.preventDefault();
-            const fData = new FormData(ev.target);
-            const formValues = {};
-
-            for (let keyval of fData.entries()) {
-                formValues[keyval[0]] = keyval[1];
-            }
-
-            if (!fData) {
-                alert("Invalid form submitted");
-            }
-
-            if (scene) {
-                const index = scene.children.findIndex((e) => {
-                    if (e.name === scene.selectedEntityName) return true;
-                });
-
-                if (index > -1) {
-                    scene.children[index].rotateEntity(this.degrees_to_radians(parseFloat(formValues.degrees)));
-                }
-            }
-        });
-
-        this._scaleForm.addEventListener(EventType.FORM.SUBMIT, (ev) => {
-            ev.preventDefault();
-            const fData = new FormData(ev.target);
-            const formValues = {};
-
-            for (let keyval of fData.entries()) {
-                formValues[keyval[0]] = keyval[1];
-            }
-
-            if (!fData) {
-                alert("Invalid form submitted");
-            }
-
-            if (scene) {
-                const index = scene.children.findIndex((e) => {
-                    if (e.name === scene.selectedEntityName) return true;
-                });
-
-                if (index > -1) {
-                    scene.children[index].scaleEntity(parseFloat(formValues.x), parseFloat(formValues.y));
-                }
-            }
-        });
-    }
-
     degrees_to_radians(degrees) {
         var pi = Math.PI;
         return degrees * (pi / 180);
@@ -352,8 +253,8 @@ export class CoreEngine {
             antalias: true,
             autoDensity: true,
             resolution: window.devicePixelRatio || 1,
-            width: 1000,
-            height: 700,
+            width: 1200,
+            height: 1000,
         });
         this.renderer = renderer;
 
@@ -371,8 +272,6 @@ export class CoreEngine {
         this.games[this.currentGameIndex].scenes.forEach((scene) => {
             this.stage.addChild(scene);
         });
-
-        this.initializeEntitySettings();
         this.initializeScenes();
         PIXI.Ticker.shared.add(this.render);
     }
@@ -519,7 +418,6 @@ export class CoreEngine {
 
         if (state) {
             const response = await useAPI("/create", state, RequestType.POST);
-
             if (response) {
                 confirm("Game Synchronized with DB Successfully!");
             }
@@ -539,9 +437,9 @@ export class CoreEngine {
 
             let entityProperties;
             gameState[scene.name] = sceneProperties;
-
-            scene.children.forEach((child) => {
-                let scale = {x: child.scale._x, y: child.scale._y};
+          
+            scene.children.forEach(child => {
+                let scale = { x: child.scale._x, y: child.scale._y };
                 entityProperties = {
                     name: child.name,
                     type: child.type,
@@ -561,12 +459,43 @@ export class CoreEngine {
         //Send save request from here JSON.stringify(gameState)
     }
 
+    loadGame(gameName){
+        //Send request to get back game data
+        //Testing method using data of a game previously saved
+        //JSON formatting for saving above needs a bit of tweaking though
+        const response = "{\"name\":\"gameScene\",\"height\":389,\"width\":310,\"gravity\":8,\"children\":[{\"name\":\"untitled0\",\"type\":\"character\",\"xPosition\":346,\"yPosition\":247,\"mass\":0,\"acceleration\":0,\"texture\":[\"blueTile\",\"\/public\/assets\/images\/blueTile.png\"],\"scale\":{\"x\":1,\"y\":1},\"rotation\":0},{\"name\":\"untitled1\",\"type\":\"character\",\"xPosition\":368,\"yPosition\":393,\"mass\":0,\"acceleration\":0,\"texture\":[\"greenTile\",\"\/public\/assets\/images\/greenTile.png\"],\"scale\":{\"x\":5,\"y\":1},\"rotation\":0},{\"name\":\"untitled2\",\"type\":\"character\",\"xPosition\":558,\"yPosition\":144,\"mass\":0,\"acceleration\":0,\"texture\":[\"redTile\",\"\/public\/assets\/images\/redTile.png\"],\"scale\":{\"x\":1,\"y\":6},\"rotation\":0}]}";
+        const gameData = JSON.parse(response);
+        const game = new Game(gameData["name"]);
+        const gameScene = new GameScene(gameData["name"], gameData["height"], gameData["width"]);
+        gameScene.gravity = gameData["gravity"];
+        game.scenes.push(gameScene);
+
+        gameData["children"].forEach(child => {
+            let entity;
+            if(child.type === EntityType["character"]){
+                const texture = child.texture[0];
+                const name = child.name;
+                entity = new AnimatableEntity(PIXI.utils.TextureCache[texture], name);
+                entity.setTransform(child.xPosition, child.yPosition, child.scale["x"], child.scale["y"], child["rotation"]);
+                entity.acceleration = child.acceleration;
+                entity.mass = child.mass;
+                gameScene.addChild(entity);
+            }
+        });
+
+        this.games[this.currentGameIndex] = game;
+        this.games[this.currentGameIndex].scenes.forEach((scene) => {
+            this.stage.addChild(scene);
+        });
+    }
+
     createGameEntity(texture = PIXI.utils.TextureCache["blueTile"]) {
         const currentScene = this.games[this.currentGameIndex].getCurrentScene();
         const currentSceneIndex = this.games[this.currentGameIndex].getSceneIndex(currentScene.name);
         const index = this.games[this.currentGameIndex].scenes[currentSceneIndex].children.length;
 
         const gameEntity = new AnimatableEntity(texture, "untitled" + index);
+        gameEntity.type = EntityType[this._entityType.value];
         gameEntity.x = this.renderer.screen.width / 2;
         gameEntity.y = this.renderer.screen.height / 2;
 
@@ -575,9 +504,8 @@ export class CoreEngine {
     }
 
     playGame() {
-        // this.games[this.currentGameIndex].setGameMode("play");
-        // console.log(this.games[this.currentGameIndex]);
-        this.saveGame();
+        this.loadGame();
+        this.games[this.currentGameIndex].setGameMode("play");
     }
 
     stopGame() {

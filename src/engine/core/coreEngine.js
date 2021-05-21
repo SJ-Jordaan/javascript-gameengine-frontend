@@ -2,8 +2,8 @@ import {AnimatableEntity} from "./animatableEntity";
 import Game from "./game";
 import EventType from "/public/scripts/common/constants/eventType.js";
 import CardBuilder from "/public/scripts/view-components/cards/cardBuilder.js";
-import { EntityType } from "./baseEntity";
-import { GameScene } from "./scene";
+import {EntityType} from "./baseEntity";
+import {GameScene} from "./scene";
 import {Card, Button, PresetColours, PresetFontSize} from "/public/scripts/view-components/cards/card.js";
 import Requests from "/public/scripts/common/utility/http/requests.js";
 import ResponseType from "/public/scripts/common/constants/responseType.js";
@@ -14,13 +14,12 @@ import Storage from "/public/scripts/common/utility/storage/storage.js";
 const EngineModes = {
     designing: "Designing",
     playing: "Playing",
-    paused: "Paused",
+    paused: "Paused"
 };
 
 Object.freeze(EngineModes);
 export class CoreEngine {
-    constructor() {
-        //Instance variables
+    constructor() { // Instance variables
         this.loader = new PIXI.Loader();
         this.stage = new PIXI.Container();
         this.currentGameIndex = 0;
@@ -42,14 +41,12 @@ export class CoreEngine {
 
         this.currentMode = EngineModes.designing;
 
-        // this._gameID = window.location.pathname.split('/');
-        // this._gameID = this._gameID[this._gameID.length - 1];
         this._gameID = sessionStorage.getItem("game");
 
         this._iDBName = "LameEngine2d";
         this._dbStoreKey = "GameState";
 
-        //methods
+        // methods
         this.init = this.init.bind(this);
         this.loadTexturesFromLocal = this.loadTexturesFromLocal.bind(this);
         this.loadTextureToWorkspace = this.loadTextureToWorkspace.bind(this);
@@ -66,7 +63,7 @@ export class CoreEngine {
         this.entityTransformedHandler = this.entityTransformedHandler.bind(this);
     }
 
-    //Transformations Event Handlers
+    // Transformations Event Handlers
     translateEntityHandler(ev) {
         ev.preventDefault();
         const fData = new FormData(ev.target);
@@ -75,10 +72,8 @@ export class CoreEngine {
         for (let keyval of fData.entries()) {
             formValues[keyval[0]] = keyval[1];
         }
-      
-        this.games[this.currentGameIndex]
-            .getCurrentSelectedEntity()
-            .translateEntity(parseFloat(formValues.x), parseFloat(formValues.y));
+
+        this.games[this.currentGameIndex].getCurrentSelectedEntity().translateEntity(parseFloat(formValues.x), parseFloat(formValues.y));
     }
 
     rotateEntityHandler(ev) {
@@ -102,15 +97,12 @@ export class CoreEngine {
             formValues[keyval[0]] = keyval[1];
         }
 
-        this.games[this.currentGameIndex]
-            .getCurrentSelectedEntity()
-            .scaleEntity(parseFloat(formValues.x), parseFloat(formValues.y));
+        this.games[this.currentGameIndex].getCurrentSelectedEntity().scaleEntity(parseFloat(formValues.x), parseFloat(formValues.y));
     }
 
     entityTransformedHandler() {
         const selectedEntity = this.games[this.currentGameIndex].getCurrentSelectedEntity();
-        if (selectedEntity) {
-            // position
+        if (selectedEntity) { // position
             document.getElementById("xPosition").value = selectedEntity.transform.position.x.toFixed(2);
             document.getElementById("yPosition").value = selectedEntity.transform.position.y.toFixed(2);
 
@@ -176,7 +168,6 @@ export class CoreEngine {
             if (formValues) {
                 const index = this.games[this.currentGameIndex].getSceneIndex(formValues.activeScene);
 
-                console.log("INDEX: " + index.toString());
                 if (index > -1) {
                     console.log(formValues);
                     this.games[this.currentGameIndex].currentSceneIndex = index;
@@ -204,39 +195,34 @@ export class CoreEngine {
             }
 
             if (formValues) {
-                const hasErrors = false;
+                let hasErrors = false;
                 if (!formValues.sceneGravity) {
                     hasErrors = true;
-                } else if (!formValues.sceneHeight && parseFloat(formValues.sceneHeight) > 0) {
+                    alert("Failed to create a new Scene, inccorect gravity parameter provided");
+                } else if (!formValues.sceneHeight && parseFloat(formValues.sceneHeight) < 0) {
                     hasErrors = true;
-                } else if (!formValues.sceneWidth && parseFloat(formValues.sceneWidth) > 0) {
+                    alert("Failed to create a new Scene, inccorect scene height provided");
+                } else if (!formValues.sceneWidth && parseFloat(formValues.sceneWidth) < 0) {
                     hasErrors = true;
+                    alert("Failed to create a new Scene, inccorect scene width provided");
                 } else if (!formValues.sceneName) {
-                    if (this.games[this.currentGameIndex].getSceneIndex(formValues.sceneName) > -1) {
-                        hasErrors = true;
-                    }
                     hasErrors = true;
+                    alert("Failed to create a new Scene, inccorect scene name provided");
+                } else if (this.games[this.currentGameIndex].getSceneIndex(formValues ?. sceneName) > -1) {
+                    hasErrors = true;
+                    alert("Failed to create a new Scene, scene name already exists");
                 }
 
-                if (hasErrors) {
-                    alert("Failed to create a new Scene, inccorect parameters provided");
-                    return undefined;
+                if (!hasErrors) {
+                    this.games[this.currentGameIndex].init(formValues.sceneWidth, formValues.sceneHeight, formValues.sceneName);
+
+                    this.stage.addChild(this.games[this.currentGameIndex].getSceneAtIndex(this.games[this.currentGameIndex].getSceneIndex(formValues.sceneName)));
+
+                    this.addScenes();
+                    confirm(`Scene ${
+                        formValues.sceneName
+                    } created Succesfully!`);
                 }
-
-                this.games[this.currentGameIndex].init(
-                    formValues.sceneWidth,
-                    formValues.sceneHeight,
-                    formValues.sceneName
-                );
-
-                this.stage.addChild(
-                    this.games[this.currentGameIndex].getSceneAtIndex(
-                        this.games[this.currentGameIndex].getSceneIndex(formValues.sceneName)
-                    )
-                );
-
-                this.addScenes();
-                confirm(`Scene ${formValues.sceneName} created Succesfully!`);
             }
         });
     }
@@ -258,7 +244,7 @@ export class CoreEngine {
             autoDensity: true,
             resolution: window.devicePixelRatio || 1,
             width: 1200,
-            height: 1000,
+            height: 1000
         });
         this.renderer = renderer;
 
@@ -267,7 +253,7 @@ export class CoreEngine {
 
         this.setupEventListeners();
 
-        //Pre-load default assets here (Assets that come with the engine)
+        // Pre-load default assets here (Assets that come with the engine)
         this.loader.baseUrl = "/public/assets/";
 
         this.loadDefaultAssets();
@@ -278,7 +264,7 @@ export class CoreEngine {
         });
         this.initializeScenes();
         this.initializeStateSettings();
-        
+
         PIXI.Ticker.shared.add(this.render);
     }
 
@@ -291,16 +277,7 @@ export class CoreEngine {
     }
 
     loadDefaultAssets() {
-        this.loader
-            .add("blueTile", "images/blueTile.png")
-            .add("brownTile", "images/brownTile.png")
-            .add("blackTile", "images/blackTile.png")
-            .add("greenTile", "images/greenTile.png")
-            .add("yellowTile", "images/yellowTile.png")
-            .add("redTile", "images/redTile.png")
-            .add("whiteTile", "images/whiteTile.png")
-            .add("orangeTile", "images/orangeTile.png")
-            .add("background", "images/background.jpg");
+        this.loader.add("blueTile", "images/blueTile.png").add("brownTile", "images/brownTile.png").add("blackTile", "images/blackTile.png").add("greenTile", "images/greenTile.png").add("yellowTile", "images/yellowTile.png").add("redTile", "images/redTile.png").add("whiteTile", "images/whiteTile.png").add("orangeTile", "images/orangeTile.png").add("background", "images/background.jpg");
 
         this.loader.onComplete.add(this.bulkUploadTexturesToWorkspace);
         this.loader.load();
@@ -343,8 +320,8 @@ export class CoreEngine {
         this._entities.appendChild(cardWrapper);
     }
 
-    //Event handler for reading images from the local machine and uploading them
-    //into the engine's TextureCache (PIXI.utils.TextureCache)
+    // Event handler for reading images from the local machine and uploading them
+    // into the engine's TextureCache (PIXI.utils.TextureCache)
     loadTexturesFromLocal(event) {
         let input = event.target;
         let selectedFiles = input.files;
@@ -390,15 +367,13 @@ export class CoreEngine {
         if (state) {
             const iDB = new Storage(this._iDBName, this._dbStoreKey);
 
-            iDB.save(state)
-                .then((response) => {
-                    if (response) {
-                        confirm("Game Saved locally Successfully!");
-                    }
-                })
-                .catch((err) => {
-                    alert("Game Save failed!");
-                });
+            iDB.save(state).then((response) => {
+                if (response) {
+                    confirm("Game Saved locally Successfully!");
+                }
+            }).catch((err) => {
+                alert("Game Save failed!");
+            });
         }
     }
 
@@ -407,8 +382,7 @@ export class CoreEngine {
 
         iDB.restore();
 
-        if (iDB.result) {
-            //Load Game Data
+        if (iDB.result) { // Load Game Data
         }
     }
 
@@ -423,20 +397,20 @@ export class CoreEngine {
         const state = this.getGameState();
 
         console.log('Game ID: ' + this._gameID.toString())
-        useAPI(`/games/${this._gameID}`, state, RequestType.POST)
-            .then(response => {
-                
-                if (response.status === 200) {
-                    console.log(response);
-                    confirm(`Game Synchronized with DB Successfully!`);
-                } else {
-                    alert("Game Failed to synchronize with DB!");
-                }
-            })
-            .catch(err => {
-                alert("Game Faaled to synchronize with DB! ")
-                console.log(err);
-            });
+        useAPI(`/games/${
+            this._gameID
+        }`, state, RequestType.POST).then(response => {
+
+            if (response.status === 200) {
+                console.log(response);
+                confirm(`Game Synchronized with DB Successfully!`);
+            } else {
+                alert("Game Failed to synchronize with DB!");
+            }
+        }).catch(err => {
+            alert("Game Faaled to synchronize with DB! ")
+            console.log(err);
+        });
     }
 
     getGameState() {
@@ -447,14 +421,17 @@ export class CoreEngine {
                 height: scene.height,
                 width: scene.width,
                 gravity: scene.gravity,
-                children: [],
+                children: []
             };
 
             let entityProperties;
             gameState[scene.name] = sceneProperties;
-          
+
             scene.children.forEach(child => {
-                let scale = { x: child.scale._x, y: child.scale._y };
+                let scale = {
+                    x: child.scale._x,
+                    y: child.scale._y
+                };
                 entityProperties = {
                     name: child.name,
                     type: child.type,
@@ -464,20 +441,20 @@ export class CoreEngine {
                     acceleration: child.acceleration,
                     texture: child._texture.textureCacheIds,
                     scale: scale,
-                    rotation: child.angle,
+                    rotation: child.angle
                 };
                 gameState[scene.name].children.push(entityProperties);
             });
         });
 
         return {state: gameState};
-        //Send save request from here JSON.stringify(gameState)
+        // Send save request from here JSON.stringify(gameState)
     }
 
-    loadGame(gameName){
-        //Send request to get back game data
-        //Testing method using data of a game previously saved
-        //JSON formatting for saving above needs a bit of tweaking though
+    loadGame(gameName) {
+        // Send request to get back game data
+        // Testing method using data of a game previously saved
+        // JSON formatting for saving above needs a bit of tweaking though
         const response = "{\"name\":\"gameScene\",\"height\":389,\"width\":310,\"gravity\":8,\"children\":[{\"name\":\"untitled0\",\"type\":\"character\",\"xPosition\":346,\"yPosition\":247,\"mass\":0,\"acceleration\":0,\"texture\":[\"blueTile\",\"\/public\/assets\/images\/blueTile.png\"],\"scale\":{\"x\":1,\"y\":1},\"rotation\":0},{\"name\":\"untitled1\",\"type\":\"character\",\"xPosition\":368,\"yPosition\":393,\"mass\":0,\"acceleration\":0,\"texture\":[\"greenTile\",\"\/public\/assets\/images\/greenTile.png\"],\"scale\":{\"x\":5,\"y\":1},\"rotation\":0},{\"name\":\"untitled2\",\"type\":\"character\",\"xPosition\":558,\"yPosition\":144,\"mass\":0,\"acceleration\":0,\"texture\":[\"redTile\",\"\/public\/assets\/images\/redTile.png\"],\"scale\":{\"x\":1,\"y\":6},\"rotation\":0}]}";
         const gameData = JSON.parse(response);
         const game = new Game(gameData["name"]);
@@ -487,7 +464,7 @@ export class CoreEngine {
 
         gameData["children"].forEach(child => {
             let entity;
-            if(child.type === EntityType["character"]){
+            if (child.type === EntityType["character"]) {
                 const texture = child.texture[0];
                 const name = child.name;
                 entity = new AnimatableEntity(PIXI.utils.TextureCache[texture], name);

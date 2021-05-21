@@ -41,7 +41,6 @@ export default class Game {
     }
 
     getSceneIndex(sceneName) {
-        console.log("TOTAL SCENES: " + this.scenes.length.toString());
         const sceneIndex = this.scenes.findIndex((s) => {
             if (s.name === sceneName) {
                 return true;

@@ -38,6 +38,7 @@ games.forEach((element) => {
 	button.fontSize = PresetFontSize.Smaller;
 	button.action = (ev) => {
 		window.location = `/create/workspace/${element.id}`
+		sessionStorage.setItem("game", element.id);
 		console.log(ev);
 	};
 	card.title = element.name;

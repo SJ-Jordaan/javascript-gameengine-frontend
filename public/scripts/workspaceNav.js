@@ -12,16 +12,6 @@ function workspaceNavigation() {
     const settingsBarToggleOn = document.getElementById("settingsBarToggleOn");
     const settingsBarToggleOff = document.getElementById("settingsBarToggleOff");
 
-    const synchronize = document.getElementById("synchronize");
-    synchronize.addEventListener(EventType.MOUSE.CLICK, (event) => {
-        alert("Synchronized successfully");
-    });
-
-    const save = document.getElementById("save");
-    save.addEventListener(EventType.MOUSE.CLICK, (event) => {
-        alert("Saved successfully");
-    });
-
     settingsBarToggleOn.addEventListener(EventType.MOUSE.CLICK, (event) => {
         settingsBar.style.width = "300px";
         main.style.marginRight = "300px";

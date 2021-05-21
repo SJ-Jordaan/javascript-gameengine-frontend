@@ -34,18 +34,15 @@ export default class Game {
         return undefined;
     }
 
-
     setCurrentSceneIndex(index) {
         if (typeof index === "number" && index < this.scenes.length) {
-            console.log(this.currentSceneIndex);
             this.currentSceneIndex = index;
-            console.log(this.currentSceneIndex);
         }
     }
 
     getSceneIndex(sceneName) {
+        console.log("TOTAL SCENES: " + this.scenes.length.toString());
         const sceneIndex = this.scenes.findIndex((s) => {
-            console.log(`${s.name} vs ${sceneName}`);
             if (s.name === sceneName) {
                 return true;
             }
@@ -92,12 +89,12 @@ export default class Game {
         });
     }
 
-    getCurrentSelectedEntity(){
+    getCurrentSelectedEntity() {
         const index = this.scenes[0].children.findIndex((e) => {
             if (e.name === this.scenes[0].selectedEntityName) return true;
         });
 
-        if(index > -1){
+        if (index > -1) {
             return this.scenes[this.currentSceneIndex].children[index];
         }
     }

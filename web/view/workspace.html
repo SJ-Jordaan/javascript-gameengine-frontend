@@ -69,15 +69,14 @@
                         <fieldset
                             class="nav-form-input-inline-container input-width-auto m-top-1 inline-fieldset display-flex-col">
                             <legend>Entity Type</legend>
-                            <section class="width-100">
-                                <select class="nav-selector width-100 m-right-3" name="type" id="entityType"
+                            <section class="width-100 m-right-2">
+                                <select class="nav-selector width-100 " name="type" id="entityType"
                                     form="filterEntitiesForm">
                                     <option value="character" selected>Characters</option>
                                     <option value="surface">Surfaces</option>
                                     <option value="background">Background</option>
                                 </select>
                             </section>
-
                         </fieldset>
                     </section>
                     <form>
@@ -111,8 +110,6 @@
                                     form="changeSceneForm">
                                     <option value="scene1">Scene 1</option>
                                     <option value="scene2">Scene 2</option>
-                                    <option value="scene3">Scene 3</option>
-                                    <option value="scene4">Scene 4</option>
                                 </select>
                             </section>
                             <button type="submit" class="btn float-right"><i class="fa fa-refresh"
@@ -267,11 +264,7 @@
                     </button>
                 </aside>
                 <section id="engine-view" class="workspace width-100 height-100">
-                    <!-- <canvas width="500" height="350"></canvas> -->
 
-                    <!-- 
-                    <button type="button" id="play-button">Play</button>
-                    <button type="button" id="stop-button">Stop</button> -->
                 </section>
             </section>
         </section>
@@ -283,46 +276,6 @@
         import { Card, Button, PresetColours, PresetFontSize } from "/public/scripts/view-components/cards/card.js";
 
         workspaceNavigation();
-
-        // console.log(engine);
-        // const entities = document.getElementById("entities");
-
-        // const builder = new CardBuilder();
-        // const card = new Card();
-        // card.title = "Entity1";
-        // card.image = "/public/images/icons/favicon-32x32.png";
-        // card.colour = PresetColours.Light;
-
-        // var buttons = new Array();
-
-        // const button = new Button();
-        // button.title = "Add";
-        // button.id = '1';
-        // button.colour = PresetColours.Primary;
-        // button.fontSize = PresetFontSize.Smaller;
-        // button.action = (ev) => {
-        //     console.log(ev);
-        // }
-        // buttons.push(button);
-
-        // card.buttons = buttons;
-
-        // for (var i = 0; i < 10; i++) {
-        //     let cardWrapper = builder.createInlineCard(card);
-        //     entities.appendChild(cardWrapper);
-        // }
-
-            // _posForm.onsubmit = (ev) => {
-        //     ev.preventDefault();
-        //     const fData = new FormData(_posForm);
-        //     const formValues = {};
-
-        //     for (let keyval of fData.entries()) {
-        //         formValues[keyval[0]] = keyval[1];
-        //     }
-
-        //     console.log(formValues);
-        // };
     </script>
 </body>
 

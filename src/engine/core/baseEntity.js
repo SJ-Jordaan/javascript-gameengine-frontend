@@ -140,7 +140,6 @@ export class BaseEntity extends PIXI.Sprite {
         this.updateVertexPoints();
     }
 
-
     rotateEntity(rotation) {
         this.setTransform(this.position.x, this.position.y, this.scale.x, this.scale.y, rotation);
         this.setTransform(this.position.x, this.position.y, this.scale.x, this.scale.y, rotation);

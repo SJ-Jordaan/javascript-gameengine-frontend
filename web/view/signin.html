@@ -28,7 +28,6 @@
 			<input type="submit" value="Login" id="btnSign" onclick="logIn()" />
 			<a href="signup"><p>New here? sign up</p></a>
 		</form>
-		<button onclick="logOut()">Logout</button>
 
 		<div id="snackbar">Error</div>
 		
@@ -36,11 +35,6 @@
 		<script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
 		<script src="/public/scripts/googleInitializer.js"></script>
 		<script src="/public/scripts/signin.js"></script>
-		<script>
-			function logOut() {
-				firebase.auth().signOut();
-				sessionStorage.clear();
-			}
-		</script>
+
 	</body>
 </html>

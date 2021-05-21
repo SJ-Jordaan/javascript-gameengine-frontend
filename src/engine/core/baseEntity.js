@@ -35,7 +35,6 @@ export class BaseEntity extends PIXI.Sprite {
         this.snapToEdge = this.snapToEdge.bind(this);
         this.snapToVertex = this.snapToVertex.bind(this);
         this.getSiblings = this.getSiblings.bind(this);
-        this.transformEntity = this.transformEntity.bind(this);
     }
 
     updateVertexPoints() {

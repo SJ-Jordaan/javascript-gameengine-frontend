@@ -277,6 +277,8 @@ export class CoreEngine {
             this.stage.addChild(scene);
         });
         this.initializeScenes();
+        this.initializeStateSettings();
+        
         PIXI.Ticker.shared.add(this.render);
     }
 
@@ -421,14 +423,20 @@ export class CoreEngine {
         const state = this.getGameState();
 
         console.log('Game ID: ' + this._gameID.toString())
-        if (state && this._gameID) {
-            const response = await useAPI(`/games/${this._gameID}`, state, RequestType.POST);
-
-            if (response) {
-                console.log(response);
-                confirm(`Game Synchronized with DB Successfully: ${this._gameID}`);
-            }
-        }
+        useAPI(`/games/${this._gameID}`, state, RequestType.POST)
+            .then(response => {
+                
+                if (response.status === 200) {
+                    console.log(response);
+                    confirm(`Game Synchronized with DB Successfully!`);
+                } else {
+                    alert("Game Failed to synchronize with DB!");
+                }
+            })
+            .catch(err => {
+                alert("Game Faaled to synchronize with DB! ")
+                console.log(err);
+            });
     }
 
     getGameState() {
@@ -462,7 +470,7 @@ export class CoreEngine {
             });
         });
 
-        return gameState;
+        return {state: gameState};
         //Send save request from here JSON.stringify(gameState)
     }
 
